@@ -10,6 +10,51 @@ export interface StudyCard {
 
 export const STUDY_CARDS: StudyCard[] = [
   {
+    id: 'class-vs-object',
+    zoneId: 'z0',
+    title: 'Class vs object',
+    summary:
+      'A class is a type blueprint. An object is one instance created with new. Variables hold references.',
+    theory: [
+      'Dog a = new Dog("Rex"); Dog b = a; means two variables, one object.',
+      'Methods run on an object’s state; static members belong to the class.',
+      'Exams ask “how many objects?” — count new, not variable names.',
+    ],
+    snippet:
+      'Dog a = new Dog("Rex");\nDog b = a;\n// one object, two references',
+    trap: 'Counting three objects because there are three variables.',
+  },
+  {
+    id: 'encapsulation-api',
+    zoneId: 'z0',
+    title: 'Encapsulation as API design',
+    summary:
+      'private fields + controlled methods protect invariants — not just “Java style.”',
+    theory: [
+      'Callers should not depend on how you store data.',
+      'Getters can return copies; setters can validate.',
+      'Public fields freeze your representation forever.',
+    ],
+    snippet:
+      'private int hp;\nvoid damage(int n) { if (n > 0) hp = Math.max(0, hp - n); }',
+    trap: 'Thinking encapsulation is only “add getters,” with a public mutable collection still exposed.',
+  },
+  {
+    id: 'isa-hasa',
+    zoneId: 'z0',
+    title: 'IS-A vs HAS-A',
+    summary:
+      'extends means true subtype. A field means “has / uses.” Mixing them is a design smell.',
+    theory: [
+      'Dog extends Animal is IS-A.',
+      'Car has Engine is HAS-A (composition).',
+      'Prefer composition when you only wanted to reuse a field or a few methods.',
+    ],
+    snippet:
+      'class Car {\n  private final Engine engine = new Engine();\n}',
+    trap: 'Extending a class just to get its fields for free.',
+  },
+  {
     id: 'chaining',
     zoneId: 'z1',
     title: 'Constructor chaining',
@@ -335,6 +380,122 @@ export const STUDY_CARDS: StudyCard[] = [
     snippet:
       'this.runes = new ArrayList<>(runes);\nList<String> runes() { return new ArrayList<>(this.runes); }',
     trap: 'Returning the internal list from a getter, or storing the constructor argument list without copying.',
+  },
+  {
+    id: 'casting-safety',
+    zoneId: 'z6',
+    title: 'Casting safety',
+    summary:
+      'Upcasts are free. Downcasts are promises to the compiler — the JVM can still throw ClassCastException.',
+    theory: [
+      'Animal a = new Dog(); is an upcast; you only see Animal’s API.',
+      '((Dog) a).bark() is safe only if a really is a Dog (or subtype).',
+      'Prefer instanceof (pattern matching) before downcasting.',
+    ],
+    snippet:
+      'if (a instanceof Dog d) {\n  d.bark();\n}',
+    trap: 'Assuming a cast that compiles cannot crash at runtime.',
+  },
+  {
+    id: 'abstract-vs-interface',
+    zoneId: 'z6',
+    title: 'Abstract class vs interface',
+    summary:
+      'Abstract class shares code and state under one IS-A. Interface is a capability you can mix in.',
+    theory: [
+      'A class can extend one class and implement many interfaces.',
+      'Abstract methods force subclasses to fill in behavior.',
+      'Interface defaults do not replace superclass abstract methods.',
+    ],
+    snippet:
+      'abstract class Shape { abstract double area(); }\ninterface Drawable { void draw(); }',
+    trap: 'Treating abstract class and interface as interchangeable on exams.',
+  },
+  {
+    id: 'super-method',
+    zoneId: 'z6',
+    title: 'super.method()',
+    summary:
+      'From inside a subclass, super.m() calls the parent implementation — useful when you extend behavior.',
+    theory: [
+      'Override replaces the method for polymorphic callers.',
+      'Inside the override you may still call super.m() for shared work.',
+      'There is no “super field access” special case for instance methods beyond the parent body.',
+    ],
+    snippet:
+      '@Override\nvoid speak() {\n  super.speak();\n  System.out.println("child");\n}',
+    trap: 'Thinking super.speak() uses the variable’s declared type from outside the class.',
+  },
+  {
+    id: 'enums-api',
+    zoneId: 'z7',
+    title: 'Enums as API',
+    summary:
+      'Enums are typesafe constant sets with name(), ordinal(), and values() — better than magic strings.',
+    theory: [
+      'enum Suit { HEARTS, CLUBS } defines a closed set of instances.',
+      'Suit.HEARTS.name() returns "HEARTS".',
+      'A String constant is not an enum and has no name().',
+    ],
+    snippet: 'enum Status { OPEN, CLOSED }\nStatus s = Status.OPEN;',
+    trap: 'Using String status everywhere and calling .name() on it.',
+  },
+  {
+    id: 'records-shallow',
+    zoneId: 'z7',
+    title: 'Records are shallow',
+    summary:
+      'Records give immutable carriers for components — but mutable component objects can still change.',
+    theory: [
+      'record Point(int x, int y) {} generates accessors, equals, hashCode, toString.',
+      'record Box(List<String> items) {} does not deep-freeze the list.',
+      'Copy mutable inputs if you need true immutability.',
+    ],
+    snippet: 'record Point(int x, int y) {}',
+    trap: 'Assuming a record of List is deeply immutable.',
+  },
+  {
+    id: 'object-methods',
+    zoneId: 'z7',
+    title: 'Object methods you actually use',
+    summary:
+      'toString for logs, equals/hashCode for collections, getClass for exact type.',
+    theory: [
+      'Default toString is Class@identityHash — override for humans.',
+      'getClass() is the exact runtime class; instanceof allows subtypes.',
+      'Override equals and hashCode together for value types.',
+    ],
+    snippet: '@Override public String toString() { return "Point(" + x + "," + y + ")"; }',
+    trap: 'Using instanceof when the exam asked for exact-class equality.',
+  },
+  {
+    id: 'composition-over-inheritance',
+    zoneId: 'z8',
+    title: 'Composition over inheritance',
+    summary:
+      'Hold a collaborator and delegate. Do not extend just to reuse storage.',
+    theory: [
+      'Inheritance couples you to the parent’s full API and evolution.',
+      'A private final Deque field keeps your Stack API tiny.',
+      'HAS-A is the usual real-world default when IS-A is shaky.',
+    ],
+    snippet:
+      'class Stack {\n  private final Deque<String> q = new ArrayDeque<>();\n  void push(String x) { q.push(x); }\n}',
+    trap: 'extends ArrayList so you “get add for free,” then clients call removeRange.',
+  },
+  {
+    id: 'intro-generics',
+    zoneId: 'z8',
+    title: 'Intro generics',
+    summary:
+      'List<String> catches wrong types at compile time. Raw List postpones pain to runtime.',
+    theory: [
+      'Type arguments are checked by the compiler.',
+      'Erasure removes them at runtime — you cannot new T().',
+      'Diamond <> infers the argument from context.',
+    ],
+    snippet: 'List<String> names = new ArrayList<>();\nnames.add("Ada");',
+    trap: 'Using raw List because “it still compiles.”',
   },
 ]
 

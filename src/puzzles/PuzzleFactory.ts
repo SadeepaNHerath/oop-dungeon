@@ -1,4 +1,5 @@
 import type { Puzzle } from './types'
+import { BRIDGE_PUZZLES } from './bridges'
 import { ZONE0_PUZZLES } from './zone0'
 import { ZONE1_PUZZLES } from './zone1'
 import { ZONE2_PUZZLES } from './zone2'
@@ -21,6 +22,7 @@ export const ALL_PUZZLES: Puzzle[] = [
   ...ZONE6_PUZZLES,
   ...ZONE7_PUZZLES,
   ...ZONE8_PUZZLES,
+  ...BRIDGE_PUZZLES,
 ]
 
 for (const puzzle of ALL_PUZZLES) {

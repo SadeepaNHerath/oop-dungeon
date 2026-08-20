@@ -7,7 +7,7 @@ export const ZONE4_ROOMS: Room[] = [
     name: 'Default Spark',
     topic: 'Inherited default methods',
     enemyId: 'default-spark',
-    puzzleIds: ['z4-default'],
+    puzzleIds: ['z4-default', 'z4-bridge'],
     requires: [],
     x: 50,
     y: 10,

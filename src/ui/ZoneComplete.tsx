@@ -34,6 +34,14 @@ export function ZoneComplete() {
               <li key={b}>{b}</li>
             ))}
           </ul>
+          <p className="mt-3 text-sm text-sigil">
+            <span className="font-semibold">In real code. </span>
+            {note.inPractice[0]}
+          </p>
+          <p className="mt-2 text-sm text-moss">
+            <span className="font-semibold">You can explain. </span>
+            {note.youCanExplain}
+          </p>
           <p className="mt-3 text-sm text-blood">
             <span className="font-semibold">Common mistake. </span>
             {note.trap}

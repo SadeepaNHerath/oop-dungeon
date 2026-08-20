@@ -27,11 +27,11 @@ export function Roadmap() {
         Java OOP roadmap
       </h1>
       <p className="mt-2 text-faded">
-        Level {Math.min(doneLevels + 1, 9)} of 9 · notes → quick check →
-        practice. Finish before your exam.
+        Level {Math.min(doneLevels + 1, 9)} of 9 · theory → real-code traps →
+        check → practice. Finish before your exam.
       </p>
       <p className="mt-1 text-sm text-rune">
-        ~ one night · clear challenges in order · Secrets unlock at the end
+        ~ one night · learn the untouching points · Secrets unlock at the end
       </p>
 
       <ol className="mt-10 space-y-0">

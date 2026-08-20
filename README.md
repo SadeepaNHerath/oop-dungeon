@@ -1,12 +1,12 @@
 # Overnight Java OOP
 
-A one-night exam roadmap for undergraduates: **9 levels**, short lesson notes, quick checks, then practice with compiler-checked Java snippets.
+A one-night exam roadmap for undergraduates: **9 levels** with deep theory, **theory ↔ real-code** bridges, under-taught pitfalls, quick checks, then practice with compiler-checked Java snippets.
 
 ## Path
 
 **Levels 1→9** unlock in order (Foundations → … → Composition & Generics).
 
-Each level: **lesson notes → quick check (no HP) → challenges**. Wrong answers teach what you believed wrongly; after two misses you can show the full lesson. Clear all nine to unlock the **Secrets vault** (full exam pack).
+Each level: **theory + in-real-code + untouching points → quick check → challenges** (including a concept bridge). Wrong answers teach what you believed wrongly; after two misses you can show the full lesson. Clear all nine to unlock the **Secrets vault** (full exam pack).
 
 ## Levels
 
@@ -40,8 +40,8 @@ Progress uses `localStorage` key `bytecode-arena-v4` (older saves migrate).
 ## Layout
 
 ```
-src/content/   levels (zones), rooms, short notes, quizzes
-src/puzzles/   authored Java + evaluate + javac harness
+src/content/   levels (zones), rooms, deep notes, quizzes, study cards
+src/puzzles/   authored Java + evaluate + bridges + javac harness
 src/core/      GameEngine (roadmap → notes → quiz → map → battle)
 src/ui/        Roadmap, notes, quiz, maps, Spell Tablet, Secrets vault
 ```

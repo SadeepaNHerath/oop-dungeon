@@ -37,7 +37,7 @@ export const ZONE8_ROOMS: Room[] = [
     name: 'Raw List',
     topic: 'Generics vs raw',
     enemyId: 'raw-list',
-    puzzleIds: ['z8-raw'],
+    puzzleIds: ['z8-raw', 'z8-bridge'],
     requires: ['z8-delegate'],
     x: 50,
     y: 58,

@@ -66,7 +66,7 @@ export const ZONE1_ROOMS: Room[] = [
     name: 'The Leak',
     topic: 'Publishing this too early',
     enemyId: 'leaker',
-    puzzleIds: ['z1-leak'],
+    puzzleIds: ['z1-leak', 'z1-bridge'],
     requires: ['static'],
     x: 50,
     y: 80,

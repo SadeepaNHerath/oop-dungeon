@@ -57,7 +57,12 @@ describe('notes and quizzes', () => {
       const quiz = ZONE_QUIZZES.find((q) => q.zoneId === zone.id)
       expect(quiz, `quiz ${zone.id}`).toBeTruthy()
       expect(quiz!.questions.length).toBeGreaterThanOrEqual(3)
-      expect(quiz!.questions.length).toBeLessThanOrEqual(5)
+      expect(quiz!.questions.length).toBeLessThanOrEqual(6)
+      const note = ZONE_NOTES.find((n) => n.zoneId === zone.id)!
+      expect(note.theory.length).toBeGreaterThan(0)
+      expect(note.inPractice.length).toBeGreaterThan(0)
+      expect(note.untouchables.length).toBeGreaterThan(0)
+      expect(note.youCanExplain).toBeTruthy()
       for (const question of quiz!.questions) {
         expect(question.choices.some((c) => c.id === question.correctId)).toBe(
           true,

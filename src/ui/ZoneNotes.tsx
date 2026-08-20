@@ -1,7 +1,7 @@
 import { getZoneNote } from '../content/zoneNotes'
 import { getZone, levelLabel } from '../content/zones'
 import { useGame } from '../store/gameStore'
-import { SpellTablet } from './SpellTablet'
+import { NoteSections } from './NoteSections'
 
 export function ZoneNotes() {
   const zoneId = useGame((s) => s.state.currentZoneId)
@@ -41,20 +41,13 @@ export function ZoneNotes() {
       <h1 className="mt-2 font-display text-3xl text-parchment">{note.title}</h1>
       <p className="mt-2 text-faded">{note.why}</p>
 
-      <ul className="mt-6 list-disc space-y-2 pl-5 text-parchment">
-        {note.bullets.map((b) => (
-          <li key={b}>{b}</li>
-        ))}
-      </ul>
+      <p className="mt-4 text-sm text-rune">
+        Theory → real-code traps → then quick check → practice.
+      </p>
 
       <div className="mt-6">
-        <SpellTablet code={note.snippet} filename="Notes.java" />
+        <NoteSections note={note} showStudyCards />
       </div>
-
-      <p className="mt-4 rounded-lg border border-blood/30 bg-blood/10 px-4 py-3 text-sm">
-        <span className="font-semibold text-blood">Common mistake. </span>
-        {note.trap}
-      </p>
 
       <div className="mt-8 flex flex-wrap gap-3">
         <button

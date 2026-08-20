@@ -1,7 +1,7 @@
 import { ZONE_NOTES } from '../content/zoneNotes'
-import { ZONES, getZone, levelLabel } from '../content/zones'
+import { getZone, levelLabel } from '../content/zones'
 import { useGame } from '../store/gameStore'
-import { SpellTablet } from './SpellTablet'
+import { NoteSections } from './NoteSections'
 
 export function SecretsVault() {
   const name = useGame((s) => s.state.playerName)
@@ -17,19 +17,24 @@ export function SecretsVault() {
         OOP Secrets — exam pack
       </h1>
       <p className="mt-2 text-faded">
-        Nice work, {name}. One scrollable review of every level you cleared —
-        print or copy for the night before.
+        Nice work, {name}. Theory, real-code bridges, and under-taught traps in
+        one scroll — print or copy the night before.
       </p>
 
       <section className="mt-8 rounded-xl border border-rune/40 bg-panel/80 p-5">
-        <h2 className="font-display text-xl text-rune">You now know…</h2>
+        <h2 className="font-display text-xl text-rune">You can explain…</h2>
         <ul className="mt-3 list-disc space-y-1.5 pl-5 text-parchment">
-          {ZONES.map((zone) => (
-            <li key={zone.id}>
-              <span className="font-semibold">{levelLabel(zone)} — {zone.friendlyName}:</span>{' '}
-              {zone.topic}
-            </li>
-          ))}
+          {ZONE_NOTES.map((note) => {
+            const zone = getZone(note.zoneId)
+            return (
+              <li key={note.zoneId}>
+                <span className="font-semibold">
+                  {levelLabel(zone)} — {zone.friendlyName}:
+                </span>{' '}
+                {note.youCanExplain}
+              </li>
+            )
+          })}
         </ul>
       </section>
 
@@ -48,18 +53,9 @@ export function SecretsVault() {
                 {note.title}
               </h2>
               <p className="mt-1 text-sm text-faded">{note.why}</p>
-              <ul className="mt-4 list-disc space-y-1.5 pl-5 text-sm text-parchment">
-                {note.bullets.map((b) => (
-                  <li key={b}>{b}</li>
-                ))}
-              </ul>
               <div className="mt-4">
-                <SpellTablet code={note.snippet} filename="Notes.java" />
+                <NoteSections note={note} showStudyCards compact />
               </div>
-              <p className="mt-4 rounded-lg border border-blood/30 bg-blood/10 px-3 py-2 text-sm text-parchment">
-                <span className="font-semibold text-blood">Common mistake. </span>
-                {note.trap}
-              </p>
               <button
                 type="button"
                 onClick={() => enterZone(note.zoneId, { reviewNotes: true })}

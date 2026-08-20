@@ -17,7 +17,7 @@ export const ZONE6_ROOMS: Room[] = [
     name: 'Brittle Cast',
     topic: 'ClassCastException',
     enemyId: 'brittle-cast',
-    puzzleIds: ['z6-downcast'],
+    puzzleIds: ['z6-downcast', 'z6-bridge'],
     requires: ['z6-upcast'],
     x: 50,
     y: 26,

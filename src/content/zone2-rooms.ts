@@ -7,7 +7,7 @@ export const ZONE2_ROOMS: Room[] = [
     name: 'Package Wall',
     topic: 'Package-private across packages',
     enemyId: 'pkg-warden',
-    puzzleIds: ['z2-pkg'],
+    puzzleIds: ['z2-pkg', 'z2-bridge'],
     requires: [],
     x: 50,
     y: 10,

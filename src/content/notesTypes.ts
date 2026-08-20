@@ -20,7 +20,16 @@ export interface ZoneNote {
   zoneId: string
   title: string
   why: string
+  /** Short scan line for hubs / complete screens */
   bullets: string[]
+  /** Core exam rules */
+  theory: string[]
+  /** Where the same rule shows up in real systems */
+  inPractice: string[]
+  /** Under-taught pitfalls exams and code reviews catch */
+  untouchables: string[]
+  /** One real-world consequence the student can explain after the level */
+  youCanExplain: string
   snippet: string
   trap: string
 }

@@ -17,7 +17,7 @@ export const ZONE7_ROOMS: Room[] = [
     name: 'Enum Court',
     topic: 'Enum name and values',
     enemyId: 'enum-court',
-    puzzleIds: ['z7-enum'],
+    puzzleIds: ['z7-enum', 'z7-bridge'],
     requires: ['z7-nested'],
     x: 50,
     y: 26,

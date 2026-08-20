@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { ZONE_NOTES } from '../content/zoneNotes'
 import { ZONES, levelLabel } from '../content/zones'
 import { cn } from './cn'
-import { SpellTablet } from './SpellTablet'
+import { NoteSections } from './NoteSections'
 
 interface CodexProps {
   onClose: () => void
@@ -25,10 +25,17 @@ export function Codex({ onClose }: CodexProps) {
     return ZONE_NOTES.filter((note) => {
       if (note.zoneId !== zoneId) return false
       if (!q) return true
-      return (
-        note.title.toLowerCase().includes(q) ||
-        note.why.toLowerCase().includes(q)
-      )
+      const hay = [
+        note.title,
+        note.why,
+        ...note.theory,
+        ...note.inPractice,
+        ...note.untouchables,
+        note.youCanExplain,
+      ]
+        .join(' ')
+        .toLowerCase()
+      return hay.includes(q)
     })
   }, [zoneId, query])
 
@@ -40,7 +47,7 @@ export function Codex({ onClose }: CodexProps) {
           <div>
             <h2 className="font-display text-2xl text-parchment">Lesson notes</h2>
             <p className="text-sm text-faded">
-              Short cards per level — open anytime while you learn.
+              Theory, real-code bridges, and under-taught traps — open anytime.
             </p>
           </div>
           <button
@@ -83,18 +90,9 @@ export function Codex({ onClose }: CodexProps) {
               >
                 <h3 className="font-display text-xl text-rune">{note.title}</h3>
                 <p className="mt-1 text-sm text-parchment">{note.why}</p>
-                <ul className="mt-3 list-disc space-y-1 pl-4 text-sm text-faded">
-                  {note.bullets.map((bullet) => (
-                    <li key={bullet}>{bullet}</li>
-                  ))}
-                </ul>
-                <div className="mt-3">
-                  <SpellTablet code={note.snippet} filename="Notes.java" />
+                <div className="mt-4">
+                  <NoteSections note={note} showStudyCards compact />
                 </div>
-                <p className="mt-3 rounded-lg border border-blood/30 bg-blood/10 px-3 py-2 text-sm text-parchment">
-                  <span className="font-semibold text-blood">Common mistake. </span>
-                  {note.trap}
-                </p>
               </article>
             ))}
             {notes.length === 0 ? (

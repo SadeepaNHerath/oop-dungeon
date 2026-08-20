@@ -32,9 +32,9 @@ export function TitleScreen({ onOpenStudy }: TitleScreenProps) {
         Finish this roadmap before your exam
       </h1>
       <p className="mt-4 text-lg text-faded">
-        Nine levels · lesson notes → quick check → practice. Learn from wrong
-        answers as you go; unlock the full Secrets vault when you clear them
-        all.
+        Nine levels · theory → real-code traps → quick check → practice. Learn
+        the under-taught points where OOP meets production; unlock the Secrets
+        vault when you clear them all.
       </p>
 
       <form onSubmit={onStart} className="mt-10 space-y-4">
@@ -77,7 +77,7 @@ export function TitleScreen({ onOpenStudy }: TitleScreenProps) {
       <section className="mt-12 rounded-xl border border-edge bg-panel/70 p-5">
         <h2 className="font-display text-xl text-rune">How to use this</h2>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-faded">
-          <li>~ one night · 9 levels · notes → check → practice.</li>
+          <li>~ one night · 9 levels · theory → real-code traps → check → practice.</li>
           <li>Levels unlock in order. Pass the quick check to open challenges.</li>
           <li>
             Wrong answers cost 15 HP but teach what you believed wrongly. After

@@ -47,7 +47,7 @@ export const ZONE0_ROOMS: Room[] = [
     name: 'Is / Has Fork',
     topic: 'IS-A vs HAS-A',
     enemyId: 'isa-fork',
-    puzzleIds: ['z0-isa'],
+    puzzleIds: ['z0-isa', 'z0-bridge'],
     requires: ['z0-encap'],
     x: 50,
     y: 74,

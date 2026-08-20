@@ -64,9 +64,23 @@ export function WhyPanel() {
       ) : null}
 
       {note ? (
-        <p className="mt-4 text-sm text-sigil">
-          Related notes: <span className="font-semibold">{note.title}</span>
-        </p>
+        <div className="mt-6 space-y-2 rounded-lg border border-sigil/30 bg-panel px-4 py-3 text-sm">
+          <p className="text-sigil">
+            Related notes: <span className="font-semibold">{note.title}</span>
+          </p>
+          {note.inPractice[0] ? (
+            <p className="text-parchment">
+              <span className="font-semibold text-sigil">In real code. </span>
+              {note.inPractice[0]}
+            </p>
+          ) : null}
+          {note.untouchables[0] ? (
+            <p className="text-parchment">
+              <span className="font-semibold text-blood">Untouching point. </span>
+              {note.untouchables[0]}
+            </p>
+          ) : null}
+        </div>
       ) : null}
 
       <button

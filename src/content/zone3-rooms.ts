@@ -37,7 +37,7 @@ export const ZONE3_ROOMS: Room[] = [
     name: 'Exact Match',
     topic: 'Overload: exact vs widening vs boxing',
     enemyId: 'exact-match',
-    puzzleIds: ['z3-overload'],
+    puzzleIds: ['z3-overload', 'z3-bridge'],
     requires: ['z3-field'],
     x: 50,
     y: 58,

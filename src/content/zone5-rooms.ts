@@ -27,7 +27,7 @@ export const ZONE5_ROOMS: Room[] = [
     name: 'Broken Contract',
     topic: 'equals and hashCode',
     enemyId: 'broken-contract',
-    puzzleIds: ['z5-hash'],
+    puzzleIds: ['z5-hash', 'z5-bridge'],
     requires: ['z5-final-method'],
     x: 50,
     y: 42,
