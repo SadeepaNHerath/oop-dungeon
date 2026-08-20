@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Code", monospace;
+
+  --color-ink: #0b0a0e;
+  --color-ink-2: #12111a;
+  --color-panel: #1c1a24;
+  --color-panel-2: #262330;
+  --color-edge: #3d3a4a;
+  --color-parchment: #e8dcc4;
+  --color-faded: #a39bb0;
+  --color-rune: #e8b86d;
+  --color-rune-dim: #b8893d;
+  --color-sigil: #7dd3d0;
+  --color-blood: #e85d4c;
+  --color-moss: #8fbf7a;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-parchment);
+  font-family: var(--font-sans);
+}
+
+#root {
+  min-height: 100svh;
+}
+
+@keyframes hp-flash {
+  0% {
+    filter: brightness(1.8);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+.hp-flash {
+  animation: hp-flash 0.45s ease-out;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.35s ease-out;
+}
