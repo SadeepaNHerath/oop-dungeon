@@ -41,6 +41,11 @@ export const ZONE0_PUZZLES: Puzzle[] = [
     codexId: 'z0',
     expectCompile: 'ok',
     expectedOutput: 'Rex Fido Rex',
+    wrongReasons: {
+      b: 'That would mean c pointed at Fido’s object — but c = a aliases Rex’s object.',
+      c: 'There is one Dog class and two Dog objects. Variables are not classes.',
+      d: 'This code is legal Java; assignment of references does not fail to compile.',
+    },
     commonTrap: 'Counting three objects because there are three variables.',
   },
   {
@@ -83,6 +88,11 @@ export const ZONE0_PUZZLES: Puzzle[] = [
     codexId: 'z0',
     expectCompile: 'ok',
     expectedOutput: '2',
+    wrongReasons: {
+      a: 'n starts at 0, but bump ran twice — value() is not still 0.',
+      b: 'One bump would leave 1; two bumps leave 2.',
+      d: 'Instance int fields default to 0; only locals need an explicit initializer.',
+    },
     commonTrap: 'Expecting a compile error because n was not assigned in the constructor.',
   },
   {
@@ -123,6 +133,11 @@ export const ZONE0_PUZZLES: Puzzle[] = [
     codexId: 'z0',
     expectCompile: 'ok',
     expectedOutput: 'lit\ndone',
+    wrongReasons: {
+      a: 'Constructor body runs during new, so lit prints before done.',
+      c: 'main still runs after construction and prints done.',
+      d: 'new Torch() does run the constructor — lit is not skipped.',
+    },
     commonTrap: 'Thinking the constructor runs after main finishes.',
   },
   {
@@ -163,6 +178,11 @@ export const ZONE0_PUZZLES: Puzzle[] = [
     ],
     codexId: 'z0',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: '“Purse must be public.” is incorrect. private means only Purse (and its nest) can touch coins.',
+      c: '“private fields cannot be initialized.” is incorrect. private means only Purse (and its nest) can touch coins.',
+      d: '“main cannot create Purse.” is incorrect. private means only Purse (and its nest) can touch coins.',
+    },
     commonTrap: 'Thinking private only hides from other packages, not other classes in the same file/package.',
   },
   {
@@ -209,6 +229,11 @@ export const ZONE0_PUZZLES: Puzzle[] = [
     codexId: 'z0',
     expectCompile: 'ok',
     expectedOutput: 'engine\ntrue',
+    wrongReasons: {
+      b: '“engine\\nfalse” is incorrect. Car HAS-A Engine. SportsCar IS-A Car.',
+      c: '“Compile error” is incorrect. Car HAS-A Engine. SportsCar IS-A Car.',
+      d: '“true\\nengine” is incorrect. Car HAS-A Engine. SportsCar IS-A Car.',
+    },
     commonTrap: 'Calling Engine an IS-A of Car, or expecting instanceof false.',
   },
   {
@@ -268,6 +293,11 @@ export const ZONE0_PUZZLES: Puzzle[] = [
     expectCompile: 'fail',
     fixMode: 'inject',
     fixMarker: '/*FIX*/',
+    wrongReasons: {
+      a: 'public String name is legal but not encapsulated — the field is wide open.',
+      c: 'name = name only assigns the parameter to itself; the field stays null.',
+      d: 'String is final — you cannot extend it.',
+    },
     commonTrap: 'Picking public fields, or forgetting this. in the constructor.',
   },
 ]

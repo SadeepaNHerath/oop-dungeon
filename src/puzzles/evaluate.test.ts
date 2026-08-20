@@ -13,13 +13,19 @@ describe('evaluate', () => {
     }
   })
 
-  it('rejects every other choice and returns a hint', () => {
+  it('rejects every other choice and returns a wrongReason', () => {
     for (const puzzle of ALL_PUZZLES) {
+      expect(puzzle.wrongReasons, puzzle.id).toBeTruthy()
       for (const choice of puzzle.choices) {
         if (choice.id === puzzle.correctId) continue
         const result = evaluate(puzzle, choice.id)
         expect(result.correct, `${puzzle.id}:${choice.id}`).toBe(false)
         expect(result.hint, `${puzzle.id}:${choice.id}`).toBeTruthy()
+        expect(result.wrongReason, `${puzzle.id}:${choice.id}`).toBeTruthy()
+        expect(
+          puzzle.wrongReasons?.[choice.id],
+          `${puzzle.id}:${choice.id}`,
+        ).toBeTruthy()
       }
     }
   })
@@ -29,6 +35,7 @@ describe('evaluate', () => {
     const result = evaluate(puzzle, 'not-a-choice')
     expect(result.correct).toBe(false)
     expect(result.hint).toBe(puzzle.hint)
+    expect(result.wrongReason).toBeTruthy()
   })
 })
 

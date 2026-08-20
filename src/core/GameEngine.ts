@@ -3,8 +3,10 @@ import { PuzzleFactory } from '../puzzles/PuzzleFactory'
 import { evaluate } from '../puzzles/evaluate'
 import { getZoneQuiz } from '../content/quizzes'
 import {
+  courseCleared,
   getRoom,
   getZone,
+  isLevelUnlocked,
   unlockedInZone,
   zoneCleared,
 } from '../content/zones'
@@ -12,6 +14,7 @@ import { loadState, saveState } from './persist'
 import type { Feedback, GameState } from './GameState'
 
 export const WRONG_DAMAGE = 15
+export const MISSES_BEFORE_LESSON = 2
 
 export function createInitialState(playerName = ''): GameState {
   return {
@@ -26,6 +29,8 @@ export function createInitialState(playerName = ''): GameState {
     clearedRoomIds: [],
     unlockedCodexIds: [],
     passedQuizZoneIds: [],
+    courseComplete: false,
+    missCount: 0,
     quizIndex: 0,
     quizSelectedId: null,
     quizTip: null,
@@ -47,7 +52,7 @@ export class GameEngine {
 
   constructor() {
     this.state = createInitialState()
-    this.player = new Player('Adept')
+    this.player = new Player('Student')
   }
 
   subscribe(listener: Listener): () => void {
@@ -67,7 +72,7 @@ export class GameEngine {
   }
 
   startGame(name: string): void {
-    const playerName = name.trim() || 'Adept'
+    const playerName = name.trim() || 'Student'
     this.player = new Player(playerName)
     this.state = createInitialState(playerName)
     this.state.phase = 'hub'
@@ -78,17 +83,22 @@ export class GameEngine {
     const saved = loadState()
     if (!saved || saved.phase === 'title') return
     this.state = saved
+    if (courseCleared(this.state.clearedRoomIds)) {
+      this.state.courseComplete = true
+    }
     this.player = new Player(saved.playerName)
     this.player.hp = saved.hp
     this.emit()
   }
 
   enterZone(zoneId: string, options?: { reviewNotes?: boolean }): void {
+    if (!isLevelUnlocked(zoneId, this.state.clearedRoomIds)) return
     this.player.restore()
     this.state.hp = this.player.hp
     this.state.currentZoneId = zoneId
     this.state.currentRoomId = null
     this.state.puzzleIndex = 0
+    this.state.missCount = 0
     this.state.selectedChoiceId = null
     this.state.lastFeedback = null
     this.state.quizIndex = 0
@@ -190,6 +200,16 @@ export class GameEngine {
     this.state.lastFeedback = null
     this.state.selectedChoiceId = null
     this.state.quizTip = null
+    this.state.missCount = 0
+    this.emit()
+  }
+
+  openSecretsVault(): void {
+    if (!this.state.courseComplete && !courseCleared(this.state.clearedRoomIds)) return
+    this.state.courseComplete = true
+    this.state.phase = 'courseClear'
+    this.state.currentZoneId = null
+    this.state.currentRoomId = null
     this.emit()
   }
 
@@ -199,6 +219,7 @@ export class GameEngine {
     const room = getRoom(roomId)
     this.state.currentRoomId = roomId
     this.state.puzzleIndex = 0
+    this.state.missCount = 0
     this.state.selectedChoiceId = null
     this.state.lastFeedback = null
     this.state.enemyId = room.enemyId
@@ -235,33 +256,72 @@ export class GameEngine {
       const feedback: Feedback = {
         correct: true,
         hint: null,
+        wrongReason: null,
         explanation: result.explanation ?? '',
         explanationSteps: result.explanationSteps ?? [],
+        correctLabel: result.correctLabel ?? null,
         codexId: result.codexId ?? null,
         commonTrap: result.commonTrap ?? puzzle.commonTrap,
         roomComplete: this.state.puzzleIndex >= slices - 1,
+        lessonRevealed: false,
       }
       if (result.codexId && !this.state.unlockedCodexIds.includes(result.codexId)) {
         this.state.unlockedCodexIds = [...this.state.unlockedCodexIds, result.codexId]
       }
+      this.state.missCount = 0
       this.state.lastFeedback = feedback
       this.state.phase = 'feedback'
     } else {
+      this.state.missCount += 1
       this.player.takeDamage(WRONG_DAMAGE)
       this.state.hp = this.player.hp
       this.state.hpPulseKey += 1
       this.state.lastFeedback = {
         correct: false,
         hint: result.hint ?? 'Not quite.',
+        wrongReason: result.wrongReason ?? null,
         explanation: null,
         explanationSteps: [],
+        correctLabel: null,
         codexId: null,
         commonTrap: result.commonTrap ?? puzzle.commonTrap,
         roomComplete: false,
+        lessonRevealed: false,
       }
       if (this.player.isDefeated) {
         this.state.phase = 'gameOver'
       }
+    }
+    this.emit()
+  }
+
+  /** After 2 misses: reveal correct answer + explanation steps (overnight learn mode). */
+  revealLesson(): void {
+    if (
+      this.state.phase !== 'battle' ||
+      !this.state.currentRoomId ||
+      this.state.missCount < MISSES_BEFORE_LESSON
+    ) {
+      return
+    }
+    const room = getRoom(this.state.currentRoomId)
+    const puzzleId = room.puzzleIds[this.state.puzzleIndex]
+    const puzzle = PuzzleFactory.create(puzzleId)
+    const correct = puzzle.choices.find((c) => c.id === puzzle.correctId)
+    this.state.lastFeedback = {
+      correct: false,
+      hint: this.state.lastFeedback?.hint ?? puzzle.hint,
+      wrongReason: this.state.lastFeedback?.wrongReason ?? null,
+      explanation: puzzle.explanation,
+      explanationSteps: puzzle.explanationSteps,
+      correctLabel: correct?.label ?? null,
+      codexId: puzzle.codexId,
+      commonTrap: puzzle.commonTrap,
+      roomComplete: false,
+      lessonRevealed: true,
+    }
+    if (puzzle.codexId && !this.state.unlockedCodexIds.includes(puzzle.codexId)) {
+      this.state.unlockedCodexIds = [...this.state.unlockedCodexIds, puzzle.codexId]
     }
     this.emit()
   }
@@ -271,6 +331,7 @@ export class GameEngine {
     const room = getRoom(this.state.currentRoomId)
     if (this.state.puzzleIndex < room.puzzleIds.length - 1) {
       this.state.puzzleIndex += 1
+      this.state.missCount = 0
       this.state.selectedChoiceId = null
       this.state.lastFeedback = null
       this.state.phase = 'battle'
@@ -287,11 +348,19 @@ export class GameEngine {
     }
     this.state.currentRoomId = null
     this.state.puzzleIndex = 0
+    this.state.missCount = 0
     this.state.selectedChoiceId = null
     this.state.lastFeedback = null
     this.state.enemyId = null
-    this.state.phase =
-      zoneId && zoneCleared(zoneId, this.state.clearedRoomIds) ? 'zoneClear' : 'map'
+
+    if (courseCleared(this.state.clearedRoomIds)) {
+      this.state.courseComplete = true
+      this.state.phase = 'courseClear'
+    } else if (zoneId && zoneCleared(zoneId, this.state.clearedRoomIds)) {
+      this.state.phase = 'zoneClear'
+    } else {
+      this.state.phase = 'map'
+    }
     this.emit()
   }
 
@@ -301,6 +370,7 @@ export class GameEngine {
     this.state.lastFeedback = null
     this.state.selectedChoiceId = null
     this.state.puzzleIndex = 0
+    this.state.missCount = 0
     this.state.enemyHp = 100
     this.state.phase = this.state.currentRoomId ? 'battle' : 'map'
     this.emit()
@@ -309,7 +379,7 @@ export class GameEngine {
   restartZone(): void {
     const zoneId = this.state.currentZoneId
     if (!zoneId) {
-      this.startGame(this.state.playerName || 'Adept')
+      this.startGame(this.state.playerName || 'Student')
       return
     }
     const ids = new Set(getZone(zoneId).rooms.map((room) => room.id))
@@ -317,6 +387,7 @@ export class GameEngine {
     this.state.passedQuizZoneIds = this.state.passedQuizZoneIds.filter(
       (id) => id !== zoneId,
     )
+    this.state.courseComplete = courseCleared(this.state.clearedRoomIds)
     this.enterZone(zoneId, { reviewNotes: true })
   }
 

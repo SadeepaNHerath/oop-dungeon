@@ -41,6 +41,11 @@ export const ZONE8_PUZZLES: Puzzle[] = [
     codexId: 'z8',
     expectCompile: 'ok',
     expectedOutput: 'vroom',
+    wrongReasons: {
+      b: '“Compile error: Car must extend Engine” is incorrect. Car HAS-A Engine and delegates start() to ignite().',
+      c: '“(no output)” is incorrect. Car HAS-A Engine and delegates start() to ignite().',
+      d: '“NullPointerException” is incorrect. Car HAS-A Engine and delegates start() to ignite().',
+    },
     commonTrap: 'Believing Car must extend Engine to use it.',
   },
   {
@@ -91,6 +96,11 @@ export const ZONE8_PUZZLES: Puzzle[] = [
     ],
     codexId: 'z8',
     expectCompile: 'ok',
+    wrongReasons: {
+      b: '“You can never extend ArrayList.” is incorrect. IS-A should mean you can safely substitute the subtype anywhere the parent is expected.',
+      c: '“Inheritance is always better than composition.” is incorrect. IS-A should mean you can safely substitute the subtype anywhere the parent is expected.',
+      d: '“Stack must be an interface.” is incorrect. IS-A should mean you can safely substitute the subtype anywhere the parent is expected.',
+    },
     commonTrap: 'Extending a library class just to reuse a few methods.',
   },
   {
@@ -131,6 +141,11 @@ export const ZONE8_PUZZLES: Puzzle[] = [
     codexId: 'z8',
     expectCompile: 'ok',
     expectedOutput: 'log:ok',
+    wrongReasons: {
+      a: '“ok” is incorrect. Delegation forwards the call to the composed Logger.',
+      c: '“Compile error” is incorrect. Delegation forwards the call to the composed Logger.',
+      d: '“log:” is incorrect. Delegation forwards the call to the composed Logger.',
+    },
     commonTrap: 'Expecting Service to extend Logger for this to compile.',
   },
   {
@@ -169,6 +184,11 @@ export const ZONE8_PUZZLES: Puzzle[] = [
     codexId: 'z8',
     expectCompile: 'ok',
     expectedOutput: '2',
+    wrongReasons: {
+      a: '“Compile error on add(7)” is incorrect. Raw List skips element-type checks at compile time; both adds succeed.',
+      c: '“1” is incorrect. Raw List skips element-type checks at compile time; both adds succeed.',
+      d: '“ClassCastException” is incorrect. Raw List skips element-type checks at compile time; both adds succeed.',
+    },
     commonTrap: 'Thinking add(7) is a hard compile error on a raw List.',
   },
   {
@@ -206,6 +226,11 @@ export const ZONE8_PUZZLES: Puzzle[] = [
     codexId: 'z8',
     expectCompile: 'ok',
     expectedOutput: 'oop',
+    wrongReasons: {
+      b: '“Compile error: missing type on right” is incorrect. <> is the diamond operator — the compiler infers ArrayList<String>.',
+      c: '“null” is incorrect. <> is the diamond operator — the compiler infers ArrayList<String>.',
+      d: '“ArrayList” is incorrect. <> is the diamond operator — the compiler infers ArrayList<String>.',
+    },
     commonTrap: 'Believing you must repeat <String> on the right-hand side.',
   },
   {
@@ -275,6 +300,11 @@ export const ZONE8_PUZZLES: Puzzle[] = [
     expectCompile: 'fail',
     fixMode: 'inject',
     fixMarker: '/*FIX*/',
+    wrongReasons: {
+      a: 'Extending ArrayList still exposes the full List API — that is inheritance, not a minimal stack.',
+      c: 'An incomplete public array with empty methods is not a composed stack.',
+      d: 'Implementing Deque forces a huge surface area; prefer a private Deque field.',
+    },
     commonTrap: 'Extending ArrayList and calling it a stack.',
   },
 ]

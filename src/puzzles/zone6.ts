@@ -45,6 +45,11 @@ export const ZONE6_PUZZLES: Puzzle[] = [
     ],
     codexId: 'z6',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: '“new Dog() is illegal when assigned to Animal.” is incorrect. Upcast is fine. Calling Dog-only methods on an Animal reference is not.',
+      c: '“bark must be static.” is incorrect. Upcast is fine. Calling Dog-only methods on an Animal reference is not.',
+      d: '“Animal cannot be a superclass.” is incorrect. Upcast is fine. Calling Dog-only methods on an Animal reference is not.',
+    },
     commonTrap: 'Thinking the assignment Animal a = new Dog() itself is illegal.',
   },
   {
@@ -88,6 +93,11 @@ export const ZONE6_PUZZLES: Puzzle[] = [
     codexId: 'z6',
     expectCompile: 'ok',
     expectedOutput: 'ClassCastException',
+    wrongReasons: {
+      a: '“ok” is incorrect. The object is a Cat. Casting to Dog fails at runtime.',
+      c: '“Compile error” is incorrect. The object is a Cat. Casting to Dog fails at runtime.',
+      d: '“NullPointerException” is incorrect. The object is a Cat. Casting to Dog fails at runtime.',
+    },
     commonTrap: 'Expecting a compile error, or thinking the cast silently becomes null.',
   },
   {
@@ -132,6 +142,11 @@ export const ZONE6_PUZZLES: Puzzle[] = [
     codexId: 'z6',
     expectCompile: 'ok',
     expectedOutput: 'bark',
+    wrongReasons: {
+      a: '“no” is incorrect. instanceof Dog is true, so the cast is safe.',
+      c: '“ClassCastException” is incorrect. instanceof Dog is true, so the cast is safe.',
+      d: '“Compile error” is incorrect. instanceof Dog is true, so the cast is safe.',
+    },
     commonTrap: 'Expecting ClassCastException even after a successful instanceof check.',
   },
   {
@@ -176,6 +191,11 @@ export const ZONE6_PUZZLES: Puzzle[] = [
     codexId: 'z6',
     expectCompile: 'ok',
     expectedOutput: 'parent\nchild',
+    wrongReasons: {
+      a: '“child\\nparent” is incorrect. super.speak() runs Parent.speak first, then the rest of Child.speak.',
+      c: '“child” is incorrect. super.speak() runs Parent.speak first, then the rest of Child.speak.',
+      d: '“parent” is incorrect. super.speak() runs Parent.speak first, then the rest of Child.speak.',
+    },
     commonTrap: 'Thinking super.speak() is illegal or infinite-loops.',
   },
   {
@@ -214,6 +234,11 @@ export const ZONE6_PUZZLES: Puzzle[] = [
     ],
     codexId: 'z6',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: '“Abstract classes cannot declare methods.” is incorrect. Abstract methods are a contract for concrete subclasses.',
+      c: '“r must be final.” is incorrect. Abstract methods are a contract for concrete subclasses.',
+      d: '“Circle must implement Cloneable.” is incorrect. Abstract methods are a contract for concrete subclasses.',
+    },
     commonTrap: 'Thinking abstract methods somehow get an empty default body.',
   },
   {
@@ -260,6 +285,11 @@ export const ZONE6_PUZZLES: Puzzle[] = [
     ],
     codexId: 'z6',
     expectCompile: 'ok',
+    wrongReasons: {
+      b: '“Interfaces hold per-instance mutable fields like classes.” is incorrect. One superclass, many interfaces. Interface fields are constants.',
+      c: '“Never combine an abstract class with an interface.” is incorrect. One superclass, many interfaces. Interface fields are constants.',
+      d: '“Abstract class and interface are identical in Java.” is incorrect. One superclass, many interfaces. Interface fields are constants.',
+    },
     commonTrap: 'Treating abstract class and interface as interchangeable.',
   },
 ]

@@ -9,7 +9,7 @@ export function DungeonMap() {
   const enterZone = useGame((s) => s.enterZone)
 
   if (!state.currentZoneId) {
-    return <p className="p-8 text-faded">No zone selected.</p>
+    return <p className="p-8 text-faded">No level selected.</p>
   }
 
   const zone = getZone(state.currentZoneId)
@@ -18,7 +18,9 @@ export function DungeonMap() {
     <main className="mx-auto max-w-4xl px-4 py-8 fade-up">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-3xl text-parchment">{zone.name}</h1>
+          <h1 className="font-display text-3xl text-parchment">
+            Level {zone.displayNumber} — {zone.friendlyName}
+          </h1>
           <p className="mt-1 text-faded">{zone.topic}</p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -29,14 +31,14 @@ export function DungeonMap() {
             }
             className="rounded-md border border-sigil/40 px-3 py-1.5 text-sm text-sigil hover:bg-panel"
           >
-            Review notes
+            Lesson notes
           </button>
           <button
             type="button"
             onClick={backToHub}
             className="rounded-md border border-edge px-3 py-1.5 text-sm text-faded hover:text-parchment"
           >
-            Back to zones
+            Back to roadmap
           </button>
         </div>
       </div>

@@ -12,6 +12,10 @@ import { ZONE8_EDGES, ZONE8_ROOMS } from './zone8-rooms'
 
 export interface Zone {
   id: string
+  /** Player-facing level number 1–9 */
+  displayNumber: number
+  /** Short hub title without fantasy dungeon branding */
+  friendlyName: string
   name: string
   short: string
   topic: string
@@ -23,8 +27,10 @@ export interface Zone {
 export const ZONES: Zone[] = [
   {
     id: 'z0',
-    name: 'Foundations Gate',
-    short: 'Zone 0',
+    displayNumber: 1,
+    friendlyName: 'Foundations',
+    name: 'Foundations',
+    short: 'Level 1',
     topic: 'Class, object, encapsulation, IS-A vs HAS-A',
     group: 'foundations',
     rooms: ZONE0_ROOMS,
@@ -32,53 +38,65 @@ export const ZONES: Zone[] = [
   },
   {
     id: 'z1',
-    name: 'Constructor Citadel',
-    short: 'Zone 1',
-    topic: 'Object lifecycle: this(), super(), init order, leaking this',
+    displayNumber: 2,
+    friendlyName: 'Constructors',
+    name: 'Constructors',
+    short: 'Level 2',
+    topic: 'this(), super(), init order, leaking this',
     group: 'edge',
     rooms: ZONE1_ROOMS,
     edges: ZONE1_EDGES,
   },
   {
     id: 'z2',
-    name: 'Visibility Maze',
-    short: 'Zone 2',
-    topic: 'public, package-private, protected, private — including JLS 6.6.2',
+    displayNumber: 3,
+    friendlyName: 'Access Rules',
+    name: 'Access Rules',
+    short: 'Level 3',
+    topic: 'public, package-private, protected, private (JLS 6.6.2)',
     group: 'edge',
     rooms: ZONE2_ROOMS,
     edges: ZONE2_EDGES,
   },
   {
     id: 'z3',
-    name: 'Polymorphism Mirage',
-    short: 'Zone 3',
-    topic: 'Override vs hide, overload resolution, compile-time then runtime',
+    displayNumber: 4,
+    friendlyName: 'Polymorphism',
+    name: 'Polymorphism',
+    short: 'Level 4',
+    topic: 'Override vs hide, overload, then dispatch',
     group: 'edge',
     rooms: ZONE3_ROOMS,
     edges: ZONE3_EDGES,
   },
   {
     id: 'z4',
-    name: 'Interface Nexus',
-    short: 'Zone 4',
-    topic: 'default / static methods, diamond, interface constants',
+    displayNumber: 5,
+    friendlyName: 'Interfaces',
+    name: 'Interfaces',
+    short: 'Level 5',
+    topic: 'default / static methods, diamond, constants',
     group: 'edge',
     rooms: ZONE4_ROOMS,
     edges: ZONE4_EDGES,
   },
   {
     id: 'z5',
-    name: 'Immutability Crypt',
-    short: 'Zone 5',
-    topic: 'final, equals/hashCode, sealed classes (Java 17+)',
+    displayNumber: 6,
+    friendlyName: 'Object Integrity',
+    name: 'Object Integrity',
+    short: 'Level 6',
+    topic: 'final, equals/hashCode, sealed classes',
     group: 'edge',
     rooms: ZONE5_ROOMS,
     edges: ZONE5_EDGES,
   },
   {
     id: 'z6',
-    name: 'Type Forge',
-    short: 'Zone 6',
+    displayNumber: 7,
+    friendlyName: 'Types & Casting',
+    name: 'Types & Casting',
+    short: 'Level 7',
     topic: 'Casting, instanceof, super.method(), abstract methods',
     group: 'types',
     rooms: ZONE6_ROOMS,
@@ -86,8 +104,10 @@ export const ZONES: Zone[] = [
   },
   {
     id: 'z7',
-    name: 'Nest & Object Hall',
-    short: 'Zone 7',
+    displayNumber: 8,
+    friendlyName: 'Nested Types & Object',
+    name: 'Nested Types & Object',
+    short: 'Level 8',
     topic: 'Nested types, enums, records, Object methods',
     group: 'types',
     rooms: ZONE7_ROOMS,
@@ -95,34 +115,14 @@ export const ZONES: Zone[] = [
   },
   {
     id: 'z8',
-    name: 'Composition Yard',
-    short: 'Zone 8',
+    displayNumber: 9,
+    friendlyName: 'Composition & Generics',
+    name: 'Composition & Generics',
+    short: 'Level 9',
     topic: 'Composition, delegation, intro generics',
     group: 'types',
     rooms: ZONE8_ROOMS,
     edges: ZONE8_EDGES,
-  },
-]
-
-export const ZONE_GROUPS: Array<{
-  id: Zone['group']
-  title: string
-  blurb: string
-}> = [
-  {
-    id: 'foundations',
-    title: 'Foundations',
-    blurb: 'Start here if OOP is new.',
-  },
-  {
-    id: 'edge',
-    title: 'Edge cases',
-    blurb: 'Exam traps: constructors, access, polymorphism, interfaces, integrity.',
-  },
-  {
-    id: 'types',
-    title: 'Types & design',
-    blurb: 'Casting, nesting, composition, generics.',
   },
 ]
 
@@ -164,4 +164,37 @@ export function zoneProgress(zoneId: string, cleared: string[]): {
   const rooms = getZone(zoneId).rooms
   const done = rooms.filter((room) => cleared.includes(room.id)).length
   return { done, total: rooms.length }
+}
+
+export function levelIndex(zoneId: string): number {
+  return ZONES.findIndex((z) => z.id === zoneId)
+}
+
+/** Sequential overnight path: Level N unlocks after Level N−1 challenges are done. */
+export function isLevelUnlocked(zoneId: string, cleared: string[]): boolean {
+  const idx = levelIndex(zoneId)
+  if (idx <= 0) return true
+  if (idx < 0) return false
+  return zoneCleared(ZONES[idx - 1].id, cleared)
+}
+
+export function nextLevel(zoneId: string): Zone | null {
+  const idx = levelIndex(zoneId)
+  if (idx < 0 || idx >= ZONES.length - 1) return null
+  return ZONES[idx + 1]
+}
+
+export function courseCleared(cleared: string[]): boolean {
+  return ZONES.every((z) => zoneCleared(z.id, cleared))
+}
+
+export function currentRoadmapLevel(cleared: string[]): Zone {
+  for (const zone of ZONES) {
+    if (!zoneCleared(zone.id, cleared)) return zone
+  }
+  return ZONES[ZONES.length - 1]
+}
+
+export function levelLabel(zone: Zone): string {
+  return `Level ${zone.displayNumber}`
 }

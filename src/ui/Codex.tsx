@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ZONE_NOTES } from '../content/zoneNotes'
-import { ZONES } from '../content/zones'
+import { ZONES, levelLabel } from '../content/zones'
 import { cn } from './cn'
 import { SpellTablet } from './SpellTablet'
 
@@ -38,9 +38,9 @@ export function Codex({ onClose }: CodexProps) {
       <section className="relative z-10 flex max-h-[90svh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-edge bg-ink-2 fade-up">
         <div className="flex items-start justify-between gap-4 border-b border-edge p-5">
           <div>
-            <h2 className="font-display text-2xl text-parchment">Study notes</h2>
+            <h2 className="font-display text-2xl text-parchment">Lesson notes</h2>
             <p className="text-sm text-faded">
-              Short cards per zone — open anytime, nothing locked.
+              Short cards per level — open anytime while you learn.
             </p>
           </div>
           <button
@@ -64,7 +64,7 @@ export function Codex({ onClose }: CodexProps) {
                   : 'border border-edge text-faded hover:text-parchment',
               )}
             >
-              {zone.short}
+              {levelLabel(zone)}
             </button>
           ))}
           <input
@@ -92,7 +92,7 @@ export function Codex({ onClose }: CodexProps) {
                   <SpellTablet code={note.snippet} filename="Notes.java" />
                 </div>
                 <p className="mt-3 rounded-lg border border-blood/30 bg-blood/10 px-3 py-2 text-sm text-parchment">
-                  <span className="font-semibold text-blood">Exam trap. </span>
+                  <span className="font-semibold text-blood">Common mistake. </span>
                   {note.trap}
                 </p>
               </article>

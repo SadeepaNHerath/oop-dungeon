@@ -39,6 +39,11 @@ export const ZONE5_PUZZLES: Puzzle[] = [
     codexId: 'final-ref',
     expectCompile: 'ok',
     expectedOutput: '1',
+    wrongReasons: {
+      a: '“Compile error: cannot call add on a final list” is incorrect. final locks the variable, not the object. add mutates the ArrayList. Reassigning items would not compile.',
+      c: '“0” is incorrect. final locks the variable, not the object. add mutates the ArrayList. Reassigning items would not compile.',
+      d: '“Compile error: ArrayList is mutable” is incorrect. final locks the variable, not the object. add mutates the ArrayList. Reassigning items would not compile.',
+    },
     commonTrap: 'Treating final List as a frozen collection so add would not compile.',
   },
   {
@@ -89,6 +94,11 @@ export const ZONE5_PUZZLES: Puzzle[] = [
     ],
     codexId: 'final-method',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: '“Keep cannot be subclassed because it has a final method.” is incorrect. Subclassing Keep is legal. Replacing seal() is not.',
+      c: '“Ruin must write @Override or the compiler rejects the met…” is incorrect. Subclassing Keep is legal. Replacing seal() is not.',
+      d: '“seal() in Keep is private by default, so Ruin cannot ment…” is incorrect. Subclassing Keep is legal. Replacing seal() is not.',
+    },
     commonTrap: 'Believing a final method makes the whole class final.',
   },
   {
@@ -140,6 +150,11 @@ export const ZONE5_PUZZLES: Puzzle[] = [
     codexId: 'equals-hashcode',
     expectCompile: 'ok',
     expectedOutput: 'false',
+    wrongReasons: {
+      a: '“true” is incorrect. HashSet finds the bucket with hashCode first. Two Coin(1) objects have different identity hashes.',
+      c: '“Compile error: hashCode is required” is incorrect. HashSet finds the bucket with hashCode first. Two Coin(1) objects have different identity hashes.',
+      d: '“true\\nfalse” is incorrect. HashSet finds the bucket with hashCode first. Two Coin(1) objects have different identity hashes.',
+    },
     commonTrap: 'Answering true because equals is overridden, or claiming it does not compile.',
   },
   {
@@ -201,6 +216,11 @@ export const ZONE5_PUZZLES: Puzzle[] = [
     codexId: 'equals-symmetric',
     expectCompile: 'ok',
     expectedOutput: 'true false',
+    wrongReasons: {
+      a: '“true true” is incorrect. p.equals(n) uses instanceof Point. n.equals(p) requires a NamedPoint.',
+      b: '“false false” is incorrect. p.equals(n) uses instanceof Point. n.equals(p) requires a NamedPoint.',
+      d: '“false true” is incorrect. p.equals(n) uses instanceof Point. n.equals(p) requires a NamedPoint.',
+    },
     commonTrap: 'Answering true true because both have x == 1.',
   },
   {
@@ -249,6 +269,11 @@ export const ZONE5_PUZZLES: Puzzle[] = [
     ],
     codexId: 'sealed',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: '“sealed classes cannot have more than two subclasses.” is incorrect. permits is a closed guest list. Circle and Square are correctly final permitted subtypes.',
+      c: '“Circle and Square must not be final; they must be non-sea…” is incorrect. permits is a closed guest list. Circle and Square are correctly final permitted subtypes.',
+      d: '“Shape must be abstract to be sealed.” is incorrect. permits is a closed guest list. Circle and Square are correctly final permitted subtypes.',
+    },
     commonTrap: 'Claiming Circle/Square cannot be final, or that sealed implies abstract.',
   },
   {
@@ -321,6 +346,11 @@ export const ZONE5_PUZZLES: Puzzle[] = [
     expectCompile: 'fail',
     fixMode: 'inject',
     fixMarker: '/*FIX*/',
+    wrongReasons: {
+      a: 'Public mutable List field — callers can change the collection freely.',
+      b: 'Returning the internal List leaks mutability even if the field is final.',
+      d: 'That version still allows outside code to mutate the scroll’s state.',
+    },
     commonTrap: 'Picking B because the field is private final — that still shares the list.',
   },
 ]

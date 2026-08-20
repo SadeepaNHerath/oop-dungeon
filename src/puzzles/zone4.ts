@@ -41,6 +41,11 @@ export const ZONE4_PUZZLES: Puzzle[] = [
     codexId: 'default-methods',
     expectCompile: 'ok',
     expectedOutput: 'spark',
+    wrongReasons: {
+      a: '“Compile error: Wizard must implement cast” is incorrect. default methods are inherited by implementing classes unless they override them.',
+      c: '“Compile error: interfaces cannot have bodies” is incorrect. default methods are inherited by implementing classes unless they override them.',
+      d: '“(prints nothing)” is incorrect. default methods are inherited by implementing classes unless they override them.',
+    },
     commonTrap: 'Insisting Wizard is abstract or that it must write its own cast().',
   },
   {
@@ -95,6 +100,11 @@ export const ZONE4_PUZZLES: Puzzle[] = [
     ],
     codexId: 'interface-static',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: '“static methods are illegal in interfaces.” is incorrect. Class static methods can be mentioned on a subclass. Interface static methods cannot.',
+      c: '“sage() must be default, not static.” is incorrect. Class static methods can be mentioned on a subclass. Interface static methods cannot.',
+      d: '“Wizard must override sage() to use it.” is incorrect. Class static methods can be mentioned on a subclass. Interface static methods cannot.',
+    },
     commonTrap: 'Calling Wizard.sage() as if class-static inheritance applied.',
   },
   {
@@ -148,6 +158,11 @@ export const ZONE4_PUZZLES: Puzzle[] = [
     ],
     codexId: 'diamond',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: '“A class cannot implement two interfaces.” is incorrect. Two concrete defaults with the same signature is a conflict. Abstract + default is not.',
+      c: '“The compiler silently picks A because it is listed first.” is incorrect. Two concrete defaults with the same signature is a conflict. Abstract + default is not.',
+      d: '“default methods cannot share a name even in unrelated int…” is incorrect. Two concrete defaults with the same signature is a conflict. Abstract + default is not.',
+    },
     commonTrap: 'Assuming the compiler picks A or B automatically.',
   },
   {
@@ -200,6 +215,11 @@ export const ZONE4_PUZZLES: Puzzle[] = [
     codexId: 'diamond',
     expectCompile: 'ok',
     expectedOutput: 'A\nC',
+    wrongReasons: {
+      a: '“B\\nC” is incorrect. A.super.m() is an explicit call to A’s default. B’s default is not invoked.',
+      c: '“A\\nB\\nC” is incorrect. A.super.m() is an explicit call to A’s default. B’s default is not invoked.',
+      d: '“C” is incorrect. A.super.m() is an explicit call to A’s default. B’s default is not invoked.',
+    },
     commonTrap: 'Printing both A and B, or thinking A.super.m() is illegal outside a class-superclass.',
   },
   {
@@ -250,6 +270,11 @@ export const ZONE4_PUZZLES: Puzzle[] = [
     ],
     codexId: 'interface-fields',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: '“X is private because interface fields are private by defa…” is incorrect. int X = 1 in an interface is public static final int X = 1.',
+      c: '“You must write Runes.X = Runes.X + 1; instead of ++.” is incorrect. int X = 1 in an interface is public static final int X = 1.',
+      d: '“main cannot mention interface names.” is incorrect. int X = 1 in an interface is public static final int X = 1.',
+    },
     commonTrap: 'Treating X as a mutable static or as an instance field of implementers.',
   },
   {
@@ -302,6 +327,11 @@ export const ZONE4_PUZZLES: Puzzle[] = [
     ],
     codexId: 'class-vs-default',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: '“A class cannot extend a class and implement an interface …” is incorrect. Defaults fill in other interfaces. They do not fill in abstract class methods.',
+      c: '“default roar() conflicts with abstract roar() the same wa…” is incorrect. Defaults fill in other interfaces. They do not fill in abstract class methods.',
+      d: '“Beast cannot be abstract if any interface already has roa…” is incorrect. Defaults fill in other interfaces. They do not fill in abstract class methods.',
+    },
     commonTrap: 'Thinking the default satisfies Beast.roar() the same way it would satisfy another interface.',
   },
 ]

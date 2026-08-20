@@ -47,6 +47,11 @@ export const ZONE3_PUZZLES: Puzzle[] = [
     codexId: 'override-dispatch',
     expectCompile: 'ok',
     expectedOutput: 'child',
+    wrongReasons: {
+      a: '“parent” is incorrect. The compiler checks speak on Parent. The JVM runs the version from the object’s class: Child.',
+      c: '“parent\\nchild” is incorrect. The compiler checks speak on Parent. The JVM runs the version from the object’s class: Child.',
+      d: '“Compile error: p is not a Child” is incorrect. The compiler checks speak on Parent. The JVM runs the version from the object’s class: Child.',
+    },
     commonTrap: 'Printing parent because the variable is typed Parent.',
   },
   {
@@ -94,6 +99,11 @@ export const ZONE3_PUZZLES: Puzzle[] = [
     codexId: 'static-hiding',
     expectCompile: 'ok',
     expectedOutput: 'parent',
+    wrongReasons: {
+      a: '“child” is incorrect. static methods hide. The declared type of p is Parent, so Parent.speak() is invoked.',
+      c: '“parent\\nchild” is incorrect. static methods hide. The declared type of p is Parent, so Parent.speak() is invoked.',
+      d: '“Compile error: static methods cannot hide” is incorrect. static methods hide. The declared type of p is Parent, so Parent.speak() is invoked.',
+    },
     commonTrap: 'Applying the instance-override rule to a static method and answering child.',
   },
   {
@@ -138,6 +148,11 @@ export const ZONE3_PUZZLES: Puzzle[] = [
     codexId: 'static-hiding',
     expectCompile: 'ok',
     expectedOutput: '1\n2',
+    wrongReasons: {
+      a: '“2\\n2” is incorrect. Field access uses the compile-time type. p is Parent, c is Child.',
+      c: '“1\\n1” is incorrect. Field access uses the compile-time type. p is Parent, c is Child.',
+      d: '“2\\n1” is incorrect. Field access uses the compile-time type. p is Parent, c is Child.',
+    },
     commonTrap: 'Printing 2\n2 as if fields overrode like instance methods.',
   },
   {
@@ -183,6 +198,11 @@ export const ZONE3_PUZZLES: Puzzle[] = [
     codexId: 'overload-resolution',
     expectCompile: 'ok',
     expectedOutput: 'int',
+    wrongReasons: {
+      a: '“long” is incorrect. 1 is an int literal. Exact match beats widening and boxing.',
+      b: '“Integer” is incorrect. 1 is an int literal. Exact match beats widening and boxing.',
+      d: '“Compile error: ambiguous” is incorrect. 1 is an int literal. Exact match beats widening and boxing.',
+    },
     commonTrap: 'Picking Integer because “Java boxes,” or long because “int always widens.”',
   },
   {
@@ -225,6 +245,11 @@ export const ZONE3_PUZZLES: Puzzle[] = [
     codexId: 'overload-resolution',
     expectCompile: 'ok',
     expectedOutput: 'Integer',
+    wrongReasons: {
+      a: '“varargs” is incorrect. Boxing is considered before varargs. int → Integer is preferred to int → int[].',
+      c: '“Compile error: ambiguous” is incorrect. Boxing is considered before varargs. int → Integer is preferred to int → int[].',
+      d: '“int” is incorrect. Boxing is considered before varargs. int → Integer is preferred to int → int[].',
+    },
     commonTrap: 'Choosing varargs because 1 can be a one-element int array, or calling the call ambiguous.',
   },
   {
@@ -285,6 +310,11 @@ export const ZONE3_PUZZLES: Puzzle[] = [
     codexId: 'overload-then-override',
     expectCompile: 'ok',
     expectedOutput: 'cast-parent\nC.act',
+    wrongReasons: {
+      a: 'Overload uses the declared type Parent, so cast-child is not chosen.',
+      b: 'cast-parent is right, but p.act() still overrides to Child — not Parent.act.',
+      d: 'Wrong on both clocks: overload is Parent, override is Child.',
+    },
     commonTrap: 'Letting the runtime type of p pick cast(Child), or also using Parent.act because p is Parent.',
   },
 ]

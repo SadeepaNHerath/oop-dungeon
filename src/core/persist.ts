@@ -1,12 +1,17 @@
 import type { GameState } from './GameState'
 
-const KEY = 'bytecode-arena-v3'
-const LEGACY_KEYS = ['bytecode-arena-v2', 'bytecode-arena-zone1-v1']
+const KEY = 'bytecode-arena-v4'
+const LEGACY_KEYS = [
+  'bytecode-arena-v3',
+  'bytecode-arena-v2',
+  'bytecode-arena-zone1-v1',
+]
 
 function normalize(raw: unknown): GameState | null {
   if (!raw || typeof raw !== 'object') return null
   const s = raw as Partial<GameState>
   if (typeof s.playerName !== 'string') return null
+  const last = s.lastFeedback
   return {
     phase: s.phase ?? 'hub',
     playerName: s.playerName,
@@ -19,10 +24,25 @@ function normalize(raw: unknown): GameState | null {
     clearedRoomIds: s.clearedRoomIds ?? [],
     unlockedCodexIds: s.unlockedCodexIds ?? [],
     passedQuizZoneIds: s.passedQuizZoneIds ?? [],
+    courseComplete: Boolean(s.courseComplete),
+    missCount: s.missCount ?? 0,
     quizIndex: s.quizIndex ?? 0,
     quizSelectedId: s.quizSelectedId ?? null,
     quizTip: s.quizTip ?? null,
-    lastFeedback: s.lastFeedback ?? null,
+    lastFeedback: last
+      ? {
+          correct: Boolean(last.correct),
+          hint: last.hint ?? null,
+          wrongReason: last.wrongReason ?? null,
+          explanation: last.explanation ?? null,
+          explanationSteps: last.explanationSteps ?? [],
+          correctLabel: last.correctLabel ?? null,
+          codexId: last.codexId ?? null,
+          commonTrap: last.commonTrap ?? null,
+          roomComplete: Boolean(last.roomComplete),
+          lessonRevealed: Boolean(last.lessonRevealed),
+        }
+      : null,
     selectedChoiceId: s.selectedChoiceId ?? null,
     hpPulseKey: s.hpPulseKey ?? 0,
     enemyHp: s.enemyHp ?? 0,
@@ -46,9 +66,6 @@ export function loadState(): GameState | null {
       if (!old) continue
       const migrated = normalize(JSON.parse(old))
       if (migrated) {
-        if (migrated.phase === 'map' || migrated.phase === 'battle') {
-          // Force notes/quiz gate on first open after migrate unless already cleared rooms in that zone
-        }
         saveState(migrated)
         localStorage.removeItem(legacy)
         return migrated

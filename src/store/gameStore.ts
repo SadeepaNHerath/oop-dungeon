@@ -14,9 +14,11 @@ interface GameStore {
   selectQuizChoice: (choiceId: string) => void
   submitQuiz: () => void
   backToHub: () => void
+  openSecretsVault: () => void
   enterRoom: (roomId: string) => void
   selectChoice: (choiceId: string) => void
   submit: () => void
+  revealLesson: () => void
   continueFromFeedback: () => void
   restartRoom: () => void
   restartZone: () => void
@@ -34,9 +36,11 @@ export const useGame = create<GameStore>(() => ({
   selectQuizChoice: (choiceId) => gameEngine.selectQuizChoice(choiceId),
   submitQuiz: () => gameEngine.submitQuiz(),
   backToHub: () => gameEngine.backToHub(),
+  openSecretsVault: () => gameEngine.openSecretsVault(),
   enterRoom: (roomId) => gameEngine.enterRoom(roomId),
   selectChoice: (choiceId) => gameEngine.selectChoice(choiceId),
   submit: () => gameEngine.submit(),
+  revealLesson: () => gameEngine.revealLesson(),
   continueFromFeedback: () => gameEngine.continueFromFeedback(),
   restartRoom: () => gameEngine.restartRoom(),
   restartZone: () => gameEngine.restartZone(),

@@ -110,6 +110,11 @@ export const ZONE2_PUZZLES: Puzzle[] = [
     ],
     codexId: 'access-modifiers',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: '“charge is private because fields are private by default.” is incorrect. Relic itself is public — the field is the problem. Default access is the package, not the world.',
+      c: '“Thief must extend Relic to use a public class from anothe…” is incorrect. Relic itself is public — the field is the problem. Default access is the package, not the world.',
+      d: '“new a.Relic() is illegal because Relic is not public.” is incorrect. Relic itself is public — the field is the problem. Default access is the package, not the world.',
+    },
     commonTrap: 'Calling the field private-by-default, or thinking the public class makes every member public.',
   },
   {
@@ -143,6 +148,11 @@ export const ZONE2_PUZZLES: Puzzle[] = [
     codexId: 'protected-jls',
     expectCompile: 'ok',
     expectedOutput: '9\n9',
+    wrongReasons: {
+      b: '“Compile error on this.charge” is incorrect. From another package, a subclass may read protected members through its own type — this or another Heir.',
+      c: '“Compile error on other.charge” is incorrect. From another package, a subclass may read protected members through its own type — this or another Heir.',
+      d: '“0\\n0” is incorrect. From another package, a subclass may read protected members through its own type — this or another Heir.',
+    },
     commonTrap: 'Believing protected is package-only, so another package can never touch the field.',
   },
   {
@@ -187,6 +197,11 @@ export const ZONE2_PUZZLES: Puzzle[] = [
     ],
     codexId: 'protected-jls',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: '“protected members are never visible outside the declaring…” is incorrect. this.charge would compile. r.charge does not, because r is typed as Relic.',
+      c: '“Heir is not allowed to declare a method that takes a.Relic.” is incorrect. this.charge would compile. r.charge does not, because r is typed as Relic.',
+      d: '“r might be a Relic that is not an Heir, so Java forbids t…” is incorrect. this.charge would compile. r.charge does not, because r is typed as Relic.',
+    },
     commonTrap: 'Thinking “I am a subclass, so any Relic reference can see protected charge.”',
   },
   {
@@ -237,6 +252,11 @@ export const ZONE2_PUZZLES: Puzzle[] = [
     codexId: 'private-not-override',
     expectCompile: 'ok',
     expectedOutput: 'parent',
+    wrongReasons: {
+      a: '“child” is incorrect. go() is in Parent. The secret() it calls is Parent’s private method — not an override.',
+      c: '“parent\\nchild” is incorrect. go() is in Parent. The secret() it calls is Parent’s private method — not an override.',
+      d: '“Compile error: secret is private” is incorrect. go() is in Parent. The secret() it calls is Parent’s private method — not an override.',
+    },
     commonTrap: 'Expecting child because the runtime type is Child — that only happens for real overrides.',
   },
   {
@@ -281,6 +301,11 @@ export const ZONE2_PUZZLES: Puzzle[] = [
     codexId: 'access-modifiers',
     expectCompile: 'ok',
     expectedOutput: '4',
+    wrongReasons: {
+      a: '“Compile error: inner cannot see private hidden” is incorrect. A non-static inner class is part of the enclosing instance. private is “this class,” and nested classes count.',
+      c: '“0” is incorrect. A non-static inner class is part of the enclosing instance. private is “this class,” and nested classes count.',
+      d: '“Compile error: new Outer().new Inner() is illegal” is incorrect. A non-static inner class is part of the enclosing instance. private is “this class,” and nested classes count.',
+    },
     commonTrap: 'Treating private as invisible to nested classes, or forgetting the Outer.this relationship.',
   },
   {
@@ -325,6 +350,11 @@ export const ZONE2_PUZZLES: Puzzle[] = [
     ],
     codexId: 'protected-jls',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: 'Extending Relic is not enough — protected access still depends on the receiver’s compile-time type.',
+      c: 'subRef and new Heir() are also Heir-typed, so those protected reads are legal too.',
+      d: 'Protected is not “invisible across packages”; subclass-typed access from Heir is allowed.',
+    },
     commonTrap: 'Saying all four compile because “protected means subclasses get everything.”',
   },
 ]

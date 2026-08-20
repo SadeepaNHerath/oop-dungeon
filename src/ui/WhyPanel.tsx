@@ -31,10 +31,10 @@ export function WhyPanel() {
   return (
     <main className="mx-auto max-w-2xl px-4 py-10 fade-up">
       <p className="font-mono text-sm uppercase tracking-widest text-moss">
-        {feedback.roomComplete ? 'Room cleared' : 'Counter-spell landed'}
+        {feedback.roomComplete ? 'Challenge cleared' : 'Correct'}
       </p>
       <h1 className="mt-2 font-display text-3xl text-parchment">
-        Why the JVM / compiler did that
+        Why that works
       </h1>
       {room ? (
         <p className="mt-1 text-faded">
@@ -58,7 +58,7 @@ export function WhyPanel() {
 
       {trap ? (
         <p className="mt-6 rounded-lg border border-blood/30 bg-blood/10 px-4 py-3 text-sm text-parchment">
-          <span className="font-semibold text-blood">Exam trap. </span>
+          <span className="font-semibold text-blood">Common mistake. </span>
           {trap}
         </p>
       ) : null}
@@ -75,10 +75,10 @@ export function WhyPanel() {
         className="mt-8 rounded-lg bg-rune px-5 py-3 font-semibold text-ink hover:bg-rune-dim"
       >
         {!feedback.roomComplete
-          ? 'Next seal'
+          ? 'Next part'
           : room?.isBoss
-            ? 'Claim this zone'
-            : 'Return to map'}
+            ? 'Finish this level'
+            : 'Return to challenges'}
         <span className="ml-2 text-xs opacity-70">Enter</span>
       </button>
     </main>

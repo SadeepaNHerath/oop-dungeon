@@ -29,6 +29,8 @@ export interface Puzzle {
   codexId: string
   expectCompile: 'ok' | 'fail'
   commonTrap: string
+  /** Why each wrong choiceId is incorrect (overnight teaching). */
+  wrongReasons?: Record<string, string>
   expectedOutput?: string
   files?: PuzzleFile[]
   entryClass?: string

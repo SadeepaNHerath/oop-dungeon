@@ -43,6 +43,11 @@ export const ZONE7_PUZZLES: Puzzle[] = [
     codexId: 'z7',
     expectCompile: 'ok',
     expectedOutput: '1\n3',
+    wrongReasons: {
+      b: '“3\\n1” is incorrect. Static nested needs no Outer instance. Inner uses Outer.this.n.',
+      c: '“Compile error on Nested” is incorrect. Static nested needs no Outer instance. Inner uses Outer.this.n.',
+      d: '“Compile error on Inner” is incorrect. Static nested needs no Outer instance. Inner uses Outer.this.n.',
+    },
     commonTrap: 'Writing new Outer.Inner() without an Outer instance.',
   },
   {
@@ -78,6 +83,11 @@ export const ZONE7_PUZZLES: Puzzle[] = [
     codexId: 'z7',
     expectCompile: 'ok',
     expectedOutput: 'HEARTS\n2',
+    wrongReasons: {
+      b: '“0\\n2” is incorrect. name() is the constant id; values() lists all constants.',
+      c: '“HEARTS\\n1” is incorrect. name() is the constant id; values() lists all constants.',
+      d: '“Compile error” is incorrect. name() is the constant id; values() lists all constants.',
+    },
     commonTrap: 'Treating the enum as its ordinal 0 in name().',
   },
   {
@@ -113,6 +123,11 @@ export const ZONE7_PUZZLES: Puzzle[] = [
     codexId: 'z7',
     expectCompile: 'ok',
     expectedOutput: '2,5',
+    wrongReasons: {
+      b: '“Compile error: no getters” is incorrect. Records generate accessors named like the components: x(), y().',
+      c: '“0,0” is incorrect. Records generate accessors named like the components: x(), y().',
+      d: '“Point@hash” is incorrect. Records generate accessors named like the components: x(), y().',
+    },
     commonTrap: 'Looking for getX() JavaBean names — records use x().',
   },
   {
@@ -154,6 +169,11 @@ export const ZONE7_PUZZLES: Puzzle[] = [
     codexId: 'z7',
     expectCompile: 'ok',
     expectedOutput: 'Coin(7)',
+    wrongReasons: {
+      a: '“Coin@something” is incorrect. println calls toString() on the object.',
+      c: '“7” is incorrect. println calls toString() on the object.',
+      d: '“Compile error” is incorrect. println calls toString() on the object.',
+    },
     commonTrap: 'Expecting the default Class@hash form after an override exists.',
   },
   {
@@ -192,6 +212,11 @@ export const ZONE7_PUZZLES: Puzzle[] = [
     codexId: 'z7',
     expectCompile: 'ok',
     expectedOutput: 'true\nfalse\ntrue',
+    wrongReasons: {
+      a: '“true\\ntrue\\ntrue” is incorrect. instanceof allows subtypes. getClass() is the exact runtime class.',
+      c: '“false\\nfalse\\ntrue” is incorrect. instanceof allows subtypes. getClass() is the exact runtime class.',
+      d: '“true\\ntrue\\nfalse” is incorrect. instanceof allows subtypes. getClass() is the exact runtime class.',
+    },
     commonTrap: 'Thinking getClass() == Animal.class because the variable type is Animal.',
   },
   {
@@ -227,6 +252,11 @@ export const ZONE7_PUZZLES: Puzzle[] = [
     expectCompile: 'fail',
     fixMode: 'inject',
     fixMarker: '/*FIX*/',
+    wrongReasons: {
+      a: '“class Suit { static String HEARTS = "HEARTS"; }” is incorrect. name() is an Enum method. A String constant has no name().',
+      c: '“interface Suit { String HEARTS = "HEARTS"; }” is incorrect. name() is an Enum method. A String constant has no name().',
+      d: '“record Suit(String HEARTS) {}” is incorrect. name() is an Enum method. A String constant has no name().',
+    },
     commonTrap: 'Using a String constant and still calling .name().',
   },
 ]

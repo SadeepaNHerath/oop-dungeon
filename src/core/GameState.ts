@@ -8,15 +8,19 @@ export type GamePhase =
   | 'feedback'
   | 'gameOver'
   | 'zoneClear'
+  | 'courseClear'
 
 export interface Feedback {
   correct: boolean
   hint: string | null
+  wrongReason: string | null
   explanation: string | null
   explanationSteps: string[]
+  correctLabel: string | null
   codexId: string | null
   commonTrap: string | null
   roomComplete: boolean
+  lessonRevealed: boolean
 }
 
 export interface GameState {
@@ -31,6 +35,9 @@ export interface GameState {
   clearedRoomIds: string[]
   unlockedCodexIds: string[]
   passedQuizZoneIds: string[]
+  courseComplete: boolean
+  /** Wrong attempts on the current challenge (resets on new puzzle / room). */
+  missCount: number
   quizIndex: number
   quizSelectedId: string | null
   quizTip: string | null

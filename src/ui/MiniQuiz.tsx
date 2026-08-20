@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { getZoneQuiz } from '../content/quizzes'
-import { getZone } from '../content/zones'
+import { getZone, levelLabel } from '../content/zones'
 import { useGame } from '../store/gameStore'
 import { cn } from './cn'
 
@@ -30,20 +30,21 @@ export function MiniQuiz() {
   }, [question, selectQuizChoice, submitQuiz])
 
   if (!zone || !quiz || !question) {
-    return <p className="p-8 text-faded">Quiz not found.</p>
+    return <p className="p-8 text-faded">Quick check not found.</p>
   }
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10 fade-up">
       <p className="font-mono text-xs uppercase tracking-widest text-sigil">
-        {zone.short} · Mini quiz · {state.quizIndex + 1}/{quiz.questions.length}
+        {levelLabel(zone)} · Quick check · {state.quizIndex + 1}/
+        {quiz.questions.length}
       </p>
       <h1 className="mt-2 font-display text-2xl text-parchment">
         {question.prompt}
       </h1>
       <p className="mt-1 text-sm text-faded">
-        No HP cost. Answer every question correctly to open the map. Unlimited
-        retries.
+        No HP cost. Answer every question correctly to open practice.
+        Unlimited retries.
       </p>
 
       <div className="mt-6 grid gap-3">
@@ -70,7 +71,7 @@ export function MiniQuiz() {
 
       {state.quizTip ? (
         <p className="mt-4 rounded-lg border border-rune/40 bg-panel px-4 py-3 text-sm text-parchment">
-          <span className="font-semibold text-rune">Tip. </span>
+          <span className="font-semibold text-rune">Why that was wrong. </span>
           {state.quizTip} Try again.
         </p>
       ) : null}
@@ -83,7 +84,7 @@ export function MiniQuiz() {
           className="rounded-lg bg-rune px-5 py-3 font-semibold text-ink enabled:hover:bg-rune-dim disabled:opacity-40"
         >
           {state.quizIndex >= quiz.questions.length - 1
-            ? 'Finish quiz'
+            ? 'Finish check'
             : 'Next question'}
         </button>
         <button
@@ -98,7 +99,7 @@ export function MiniQuiz() {
           onClick={backToHub}
           className="rounded-lg border border-edge px-5 py-3 text-faded hover:text-parchment"
         >
-          Hub
+          Roadmap
         </button>
       </div>
     </main>

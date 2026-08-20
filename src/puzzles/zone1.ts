@@ -46,6 +46,11 @@ export const ZONE1_PUZZLES: Puzzle[] = [
     codexId: 'chaining',
     expectCompile: 'ok',
     expectedOutput: 'Parent\nChild',
+    wrongReasons: {
+      b: '“Child\\nParent” is incorrect. If you do not write super() or this(), the compiler inserts super() as the first statement.',
+      c: '“Child” is incorrect. If you do not write super() or this(), the compiler inserts super() as the first statement.',
+      d: '“Parent” is incorrect. If you do not write super() or this(), the compiler inserts super() as the first statement.',
+    },
     commonTrap: 'Predicting Child then Parent, as if the subclass constructor ran first.',
   },
   {
@@ -98,6 +103,11 @@ export const ZONE1_PUZZLES: Puzzle[] = [
     codexId: 'chaining',
     expectCompile: 'ok',
     expectedOutput: 'keep\nbase\nn=7',
+    wrongReasons: {
+      a: '“n=7\\nbase\\nkeep” is incorrect. this() must finish completely — including the implicit super() inside the target constructor — before the leftover body of Child(int) runs.',
+      c: '“base\\nkeep\\nn=7” is incorrect. this() must finish completely — including the implicit super() inside the target constructor — before the leftover body of Child(int) runs.',
+      d: '“keep\\nn=7\\nbase” is incorrect. this() must finish completely — including the implicit super() inside the target constructor — before the leftover body of Child(int) runs.',
+    },
     commonTrap: 'Printing n=7 before the this() chain (including Parent) has finished.',
   },
   {
@@ -155,6 +165,11 @@ export const ZONE1_PUZZLES: Puzzle[] = [
     ],
     codexId: 'chaining',
     expectCompile: 'fail',
+    wrongReasons: {
+      b: '“A subclass is not allowed to declare two constructors.” is incorrect. Look at CursedRelic() — it tries to chain to the parent and to a sibling constructor.',
+      c: '“super(1) is illegal because Relic already has an int cons…” is incorrect. Look at CursedRelic() — it tries to chain to the parent and to a sibling constructor.',
+      d: '“this(2) is illegal because CursedRelic(int) uses super(n).” is incorrect. Look at CursedRelic() — it tries to chain to the parent and to a sibling constructor.',
+    },
     commonTrap: 'Thinking two constructors in a subclass are illegal, or that super(1) itself is the problem.',
   },
   {
@@ -201,6 +216,11 @@ export const ZONE1_PUZZLES: Puzzle[] = [
     codexId: 'abstract-ctors',
     expectCompile: 'ok',
     expectedOutput: 'specter\nwraith',
+    wrongReasons: {
+      a: '“Compile error: abstract classes cannot have constructors.” is incorrect. abstract only blocks `new Specter()`. Subclass construction still walks the parent constructor.',
+      b: '“Compile error: you cannot declare a variable of an abstra…” is incorrect. abstract only blocks `new Specter()`. Subclass construction still walks the parent constructor.',
+      d: '“wraith” is incorrect. abstract only blocks `new Specter()`. Subclass construction still walks the parent constructor.',
+    },
     commonTrap: 'Calling this a compile error because Specter is abstract or because the variable type is Specter.',
   },
   {
@@ -277,6 +297,11 @@ export const ZONE1_PUZZLES: Puzzle[] = [
     expectCompile: 'ok',
     expectedOutput:
       'parent field\nparent block\nparent ctor\nchild field\nchild block\nchild ctor',
+    wrongReasons: {
+      b: '“parent ctor\\nparent field\\nparent block\\nchild ctor\\nchil…” is incorrect. Finish the whole parent object (its fields, blocks, then constructor body) before any child instance initializers run.',
+      c: '“parent field\\nchild field\\nparent block\\nchild block\\npar…” is incorrect. Finish the whole parent object (its fields, blocks, then constructor body) before any child instance initializers run.',
+      d: '“child field\\nchild block\\nchild ctor\\nparent field\\nparen…” is incorrect. Finish the whole parent object (its fields, blocks, then constructor body) before any child instance initializers run.',
+    },
     commonTrap: 'Running child fields/blocks before the parent constructor body returns.',
   },
   {
@@ -353,6 +378,11 @@ export const ZONE1_PUZZLES: Puzzle[] = [
     expectCompile: 'ok',
     expectedOutput:
       'Keep static\nTower static\nKeep instance\nKeep ctor\nTower instance\nTower ctor',
+    wrongReasons: {
+      a: '“Keep instance\\nKeep ctor\\nTower instance\\nTower ctor\\nKee…” is incorrect. Classes load superclass-first. Static blocks run once at load time, before any constructor.',
+      b: '“Tower static\\nKeep static\\nTower instance\\nKeep instance\\…” is incorrect. Classes load superclass-first. Static blocks run once at load time, before any constructor.',
+      d: '“Keep static\\nKeep instance\\nKeep ctor\\nTower static\\nTowe…” is incorrect. Classes load superclass-first. Static blocks run once at load time, before any constructor.',
+    },
     commonTrap: 'Running Tower’s static block before Keep’s, or mixing instance work into class-load time.',
   },
   {
@@ -400,6 +430,11 @@ export const ZONE1_PUZZLES: Puzzle[] = [
     codexId: 'leaking-this',
     expectCompile: 'ok',
     expectedOutput: '0',
+    wrongReasons: {
+      a: '“7” is incorrect. int fields start at 0. The assignment charge = 7 happens after the print.',
+      c: '“NullPointerException” is incorrect. int fields start at 0. The assignment charge = 7 happens after the print.',
+      d: '“Compile error: cannot use this inside a constructor.” is incorrect. int fields start at 0. The assignment charge = 7 happens after the print.',
+    },
     commonTrap: 'Printing 7, or expecting NullPointerException because construction is “not done.”',
   },
   {
@@ -470,6 +505,11 @@ export const ZONE1_PUZZLES: Puzzle[] = [
     codexId: 'init-order',
     expectCompile: 'ok',
     expectedOutput: 'Keep block\nKeep ctor\nseal\nHeart block\nHeart ctor',
+    wrongReasons: {
+      a: '“Heart block\\nKeep block\\nKeep ctor\\nseal\\nHeart ctor” is incorrect. Keep(String) delegates with this(), so Keep’s instance block runs with Keep(), not twice. Heart’s block waits until super() returns.',
+      b: '“Keep ctor\\nKeep block\\nseal\\nHeart block\\nHeart ctor” is incorrect. Keep(String) delegates with this(), so Keep’s instance block runs with Keep(), not twice. Heart’s block waits until super() returns.',
+      d: '“Keep block\\nKeep ctor\\nHeart block\\nHeart ctor\\nseal” is incorrect. Keep(String) delegates with this(), so Keep’s instance block runs with Keep(), not twice. Heart’s block waits until super() returns.',
+    },
     commonTrap: 'Running Heart’s instance block before Keep(String) finishes, or running Keep’s block after Keep().',
   },
   {
@@ -510,6 +550,11 @@ export const ZONE1_PUZZLES: Puzzle[] = [
     expectCompile: 'fail',
     fixMode: 'inject',
     fixMarker: '/*FIX*/',
+    wrongReasons: {
+      a: '“Door() { }” is incorrect. If the parent has no no-arg constructor, implicit super() cannot compile. this(3) needs a Door(int) that does not exist.',
+      b: '“Door() { super(); }” is incorrect. If the parent has no no-arg constructor, implicit super() cannot compile. this(3) needs a Door(int) that does not exist.',
+      d: '“Door() { this(3); }” is incorrect. If the parent has no no-arg constructor, implicit super() cannot compile. this(3) needs a Door(int) that does not exist.',
+    },
     commonTrap: 'Relying on an implicit super() when Vault has no no-arg constructor, or using this(3) with no Door(int).',
   },
 ]

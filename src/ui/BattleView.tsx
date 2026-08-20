@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { getEnemy } from '../content/enemies'
 import { getRoom } from '../content/zones'
+import { MISSES_BEFORE_LESSON } from '../core/GameEngine'
 import { currentPuzzle } from '../core/selectors'
 import { strategyFor } from '../model/Ability'
 import { useGame } from '../store/gameStore'
@@ -12,6 +13,7 @@ export function BattleView() {
   const state = useGame((s) => s.state)
   const selectChoice = useGame((s) => s.selectChoice)
   const submit = useGame((s) => s.submit)
+  const revealLesson = useGame((s) => s.revealLesson)
   const puzzle = currentPuzzle(state)
   const room = state.currentRoomId ? getRoom(state.currentRoomId) : null
   const enemy = state.enemyId ? getEnemy(state.enemyId) : null
@@ -30,14 +32,16 @@ export function BattleView() {
   }, [puzzle, selectChoice, submit])
 
   if (!puzzle || !room || !enemy) {
-    return <p className="p-8 text-center text-faded">No encounter loaded.</p>
+    return <p className="p-8 text-center text-faded">No challenge loaded.</p>
   }
 
   const attack = strategyFor(puzzle.kind).present(puzzle)
   const miss = state.lastFeedback && !state.lastFeedback.correct
+  const revealed = Boolean(state.lastFeedback?.lessonRevealed)
+  const canReveal = state.missCount >= MISSES_BEFORE_LESSON && !revealed
   const stage =
     room.puzzleIds.length > 1
-      ? `Seal ${state.puzzleIndex + 1} of ${room.puzzleIds.length}`
+      ? `Part ${state.puzzleIndex + 1} of ${room.puzzleIds.length}`
       : null
 
   return (
@@ -60,7 +64,7 @@ export function BattleView() {
           value={state.enemyHp}
           max={state.enemyMaxHp}
           tone="enemy"
-          label="Enemy"
+          label="Challenge"
         />
       </div>
 
@@ -71,15 +75,48 @@ export function BattleView() {
 
       {miss ? (
         <div className="mt-4 space-y-2">
-          <p className="rounded-lg border border-blood/40 bg-blood/10 px-4 py-3 text-sm text-parchment">
-            <span className="font-semibold text-blood">Hint. </span>
-            {state.lastFeedback?.hint} You lost 15 HP.
-          </p>
+          <div className="rounded-lg border border-blood/40 bg-blood/10 px-4 py-3 text-sm text-parchment">
+            <p className="font-semibold text-blood">What went wrong</p>
+            <p className="mt-1">
+              {state.lastFeedback?.wrongReason ?? state.lastFeedback?.hint}
+            </p>
+            <p className="mt-2 text-xs text-faded">You lost 15 HP.</p>
+          </div>
           {state.lastFeedback?.commonTrap ? (
             <p className="rounded-lg border border-rune/30 bg-panel px-4 py-3 text-sm text-parchment">
-              <span className="font-semibold text-rune">Exam trap. </span>
+              <span className="font-semibold text-rune">Common mistake. </span>
               {state.lastFeedback.commonTrap}
             </p>
+          ) : null}
+          {revealed ? (
+            <div className="rounded-lg border border-moss/40 bg-moss/10 px-4 py-3 text-sm text-parchment">
+              <p className="font-semibold text-moss">Full lesson</p>
+              {state.lastFeedback?.correctLabel ? (
+                <p className="mt-2">
+                  <span className="font-semibold">Correct answer: </span>
+                  {state.lastFeedback.correctLabel}
+                </p>
+              ) : null}
+              {state.lastFeedback?.explanation ? (
+                <p className="mt-2">{state.lastFeedback.explanation}</p>
+              ) : null}
+              {state.lastFeedback?.explanationSteps?.length ? (
+                <ol className="mt-3 list-decimal space-y-1 pl-5">
+                  {state.lastFeedback.explanationSteps.map((step) => (
+                    <li key={step}>{step}</li>
+                  ))}
+                </ol>
+              ) : null}
+            </div>
+          ) : null}
+          {canReveal ? (
+            <button
+              type="button"
+              onClick={revealLesson}
+              className="rounded-lg border border-moss/50 px-4 py-2 text-sm font-semibold text-moss hover:bg-panel"
+            >
+              Show full lesson
+            </button>
           ) : null}
         </div>
       ) : null}
@@ -93,14 +130,14 @@ export function BattleView() {
       </div>
 
       <div className="mt-5 flex items-center justify-between gap-3">
-        <p className="text-xs text-faded">Shortcuts: 1–4 select · Enter cast</p>
+        <p className="text-xs text-faded">Shortcuts: 1–4 select · Enter check</p>
         <button
           type="button"
           onClick={submit}
           disabled={!state.selectedChoiceId}
           className="rounded-lg bg-rune px-5 py-2.5 font-semibold text-ink enabled:hover:bg-rune-dim disabled:cursor-not-allowed disabled:opacity-40"
         >
-          Cast counter-spell
+          Check answer
         </button>
       </div>
     </main>
