@@ -31,7 +31,7 @@ export function Roadmap() {
         check → practice. Finish before your exam.
       </p>
       <p className="mt-1 text-sm text-rune">
-        ~ one night · learn the untouching points · Secrets unlock at the end
+        ~ one night · easy-to-miss traps · Secrets unlock at the end
       </p>
 
       <ol className="mt-10 space-y-0">

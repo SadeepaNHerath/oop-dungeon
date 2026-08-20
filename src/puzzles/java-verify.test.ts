@@ -1,10 +1,24 @@
 import { describe, expect, it } from 'vitest'
 import { ZONE_QUIZZES } from '../content/quizzes'
+import { studyCardsForZone } from '../content/study'
 import { ZONE_NOTES } from '../content/zoneNotes'
 import { ZONES } from '../content/zones'
+import { BRIDGE_PUZZLES } from './bridges'
 import { ALL_PUZZLES } from './PuzzleFactory'
 import { evaluate } from './evaluate'
 import { hasJdk, verifyPuzzle } from './javaHarness'
+
+const BRIDGE_MARKERS: Record<string, string> = {
+  'z0-bridge': 'balance',
+  'z1-bridge': 'listeners',
+  'z2-bridge': 'Helper',
+  'z3-bridge': 'log',
+  'z4-bridge': 'Plugin',
+  'z5-bridge': 'HashSet',
+  'z6-bridge': 'PaymentEvent',
+  'z7-bridge': 'Status',
+  'z8-bridge': 'ArrayList',
+}
 
 describe('evaluate bank', () => {
   it('has unique ids and four choices with a valid correctId', () => {
@@ -48,7 +62,7 @@ describe('evaluate bank', () => {
 })
 
 describe('notes and quizzes', () => {
-  it('has short notes and a quiz for every zone', () => {
+  it('has deep notes, study cards, and a quiz for every zone', () => {
     for (const zone of ZONES) {
       expect(
         ZONE_NOTES.some((n) => n.zoneId === zone.id),
@@ -63,11 +77,28 @@ describe('notes and quizzes', () => {
       expect(note.inPractice.length).toBeGreaterThan(0)
       expect(note.untouchables.length).toBeGreaterThan(0)
       expect(note.youCanExplain).toBeTruthy()
+      expect(note.bullets.length).toBeGreaterThan(0)
+      expect(studyCardsForZone(zone.id).length).toBeGreaterThan(0)
       for (const question of quiz!.questions) {
         expect(question.choices.some((c) => c.id === question.correctId)).toBe(
           true,
         )
       }
+    }
+  })
+})
+
+describe('bridge puzzles', () => {
+  it('uses real illustrative code markers (no stub-only tablets)', () => {
+    expect(BRIDGE_PUZZLES.length).toBe(9)
+    for (const puzzle of BRIDGE_PUZZLES) {
+      const marker = BRIDGE_MARKERS[puzzle.id]
+      expect(marker, puzzle.id).toBeTruthy()
+      expect(puzzle.code.includes(marker!), puzzle.id).toBe(true)
+      expect(puzzle.code.includes('System.out.println("encap")'), puzzle.id).toBe(
+        false,
+      )
+      expect(puzzle.wrongReasons, puzzle.id).toBeTruthy()
     }
   })
 })

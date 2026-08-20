@@ -1,12 +1,12 @@
 # Overnight Java OOP
 
-A one-night exam roadmap for undergraduates: **9 levels** with deep theory, **theory ↔ real-code** bridges, under-taught pitfalls, quick checks, then practice with compiler-checked Java snippets.
+A one-night exam roadmap for undergraduates: **9 levels** with deep theory, **theory ↔ real-code** bridges, easy-to-miss traps, quick checks, then practice with compiler-checked Java snippets.
 
 ## Path
 
 **Levels 1→9** unlock in order (Foundations → … → Composition & Generics).
 
-Each level: **theory + in-real-code + untouching points → quick check → challenges** (including a concept bridge). Wrong answers teach what you believed wrongly; after two misses you can show the full lesson. Clear all nine to unlock the **Secrets vault** (full exam pack).
+Each level: **60s scan → theory → in real code → easy to miss → quick check → challenges** (including a concept bridge). Wrong answers teach what you believed wrongly; after two misses you can show the full lesson. Clear all nine to unlock the **Secrets vault** (jump + expand exam pack).
 
 ## Levels
 
@@ -36,6 +36,16 @@ npm run build
 ```
 
 Progress uses `localStorage` key `bytecode-arena-v4` (older saves migrate).
+
+## QA smoke
+
+- Level 1 notes: 60s scan + sticky **Take quick check**; deep dives closed by default
+- Fail one quiz item → “Why that was wrong”; finish check → map
+- Miss a challenge twice → **Show full lesson**
+- Map nodes with bridges show **N parts**
+- Secrets: level TOC jumps; expand one level; Print / PDF
+- ~390px width: sticky CTAs, no horizontal overflow
+- Keyboard `1`–`4` / `Enter` on quiz + battle
 
 ## Layout
 

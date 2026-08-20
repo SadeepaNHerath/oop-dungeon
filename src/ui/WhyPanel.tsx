@@ -76,7 +76,7 @@ export function WhyPanel() {
           ) : null}
           {note.untouchables[0] ? (
             <p className="text-parchment">
-              <span className="font-semibold text-blood">Untouching point. </span>
+              <span className="font-semibold text-blood">Easy to miss. </span>
               {note.untouchables[0]}
             </p>
           ) : null}

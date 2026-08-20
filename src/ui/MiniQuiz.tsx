@@ -3,6 +3,7 @@ import { getZoneQuiz } from '../content/quizzes'
 import { getZone, levelLabel } from '../content/zones'
 import { useGame } from '../store/gameStore'
 import { cn } from './cn'
+import { StickyActionBar } from './StickyActionBar'
 
 export function MiniQuiz() {
   const state = useGame((s) => s.state)
@@ -33,13 +34,27 @@ export function MiniQuiz() {
     return <p className="p-8 text-faded">Quick check not found.</p>
   }
 
+  const progress = ((state.quizIndex + 1) / quiz.questions.length) * 100
+
   return (
-    <main className="mx-auto max-w-2xl px-4 py-10 fade-up">
+    <main className="mx-auto max-w-2xl px-4 pb-4 pt-10 fade-up">
       <p className="font-mono text-xs uppercase tracking-widest text-sigil">
         {levelLabel(zone)} · Quick check · {state.quizIndex + 1}/
         {quiz.questions.length}
       </p>
-      <h1 className="mt-2 font-display text-2xl text-parchment">
+      <div
+        className="mt-3 h-1.5 overflow-hidden rounded-full bg-edge"
+        role="progressbar"
+        aria-valuenow={state.quizIndex + 1}
+        aria-valuemin={1}
+        aria-valuemax={quiz.questions.length}
+      >
+        <div
+          className="h-full rounded-full bg-rune transition-[width]"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+      <h1 className="mt-4 font-display text-2xl text-parchment">
         {question.prompt}
       </h1>
       <p className="mt-1 text-sm text-faded">
@@ -76,7 +91,7 @@ export function MiniQuiz() {
         </p>
       ) : null}
 
-      <div className="mt-8 flex flex-wrap gap-3">
+      <StickyActionBar>
         <button
           type="button"
           onClick={submitQuiz}
@@ -101,7 +116,7 @@ export function MiniQuiz() {
         >
           Roadmap
         </button>
-      </div>
+      </StickyActionBar>
     </main>
   )
 }

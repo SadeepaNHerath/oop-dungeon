@@ -2,6 +2,7 @@ import { getZoneNote } from '../content/zoneNotes'
 import { getZone, levelLabel } from '../content/zones'
 import { useGame } from '../store/gameStore'
 import { NoteSections } from './NoteSections'
+import { StickyActionBar } from './StickyActionBar'
 
 export function ZoneNotes() {
   const zoneId = useGame((s) => s.state.currentZoneId)
@@ -34,22 +35,21 @@ export function ZoneNotes() {
   }
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-10 fade-up">
+    <main className="mx-auto max-w-2xl px-4 pb-4 pt-10 fade-up">
       <p className="font-mono text-xs uppercase tracking-widest text-sigil">
         {levelLabel(zone)} · Lesson notes
       </p>
       <h1 className="mt-2 font-display text-3xl text-parchment">{note.title}</h1>
       <p className="mt-2 text-faded">{note.why}</p>
-
-      <p className="mt-4 text-sm text-rune">
-        Theory → real-code traps → then quick check → practice.
+      <p className="mt-3 text-sm text-rune">
+        Scan → theory → real code → easy to miss → quick check → practice.
       </p>
 
       <div className="mt-6">
         <NoteSections note={note} showStudyCards />
       </div>
 
-      <div className="mt-8 flex flex-wrap gap-3">
+      <StickyActionBar>
         <button
           type="button"
           onClick={continueFromNotes}
@@ -73,7 +73,7 @@ export function ZoneNotes() {
         >
           Back to roadmap
         </button>
-      </div>
+      </StickyActionBar>
     </main>
   )
 }

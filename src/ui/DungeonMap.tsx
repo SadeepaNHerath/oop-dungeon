@@ -100,6 +100,9 @@ export function DungeonMap() {
               </span>
               <span className="mt-0.5 block text-[11px] leading-tight text-faded">
                 {room.topic}
+                {room.puzzleIds.length > 1
+                  ? ` · ${room.puzzleIds.length} parts`
+                  : ''}
               </span>
             </button>
           )

@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import type { ZoneNote } from '../content/notesTypes'
 import { studyCardsForZone } from '../content/study'
+import { cn } from './cn'
 import { SpellTablet } from './SpellTablet'
 
 interface NoteSectionsProps {
@@ -7,20 +9,37 @@ interface NoteSectionsProps {
   /** Show deep-dive study cards under the main note */
   showStudyCards?: boolean
   compact?: boolean
+  /** Show 60-second scan bullets at top (default true) */
+  showScan?: boolean
 }
 
 export function NoteSections({
   note,
   showStudyCards = false,
   compact = false,
+  showScan = true,
 }: NoteSectionsProps) {
   const cards = showStudyCards ? studyCardsForZone(note.zoneId) : []
+  const [openCardId, setOpenCardId] = useState<string | null>(null)
   const listClass = compact
     ? 'mt-2 list-disc space-y-1 pl-4 text-sm text-parchment'
     : 'mt-3 list-disc space-y-1.5 pl-5 text-parchment'
 
   return (
     <div className="space-y-6">
+      {showScan ? (
+        <section className="rounded-xl border border-rune/30 bg-panel/60 px-4 py-3">
+          <p className="font-mono text-[11px] uppercase tracking-widest text-rune">
+            60-second scan
+          </p>
+          <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-parchment">
+            {note.bullets.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
       <section>
         <h3 className="font-display text-lg text-rune">Theory (must know)</h3>
         <ul className={listClass}>
@@ -40,7 +59,7 @@ export function NoteSections({
       </section>
 
       <section>
-        <h3 className="font-display text-lg text-blood">Untouching points</h3>
+        <h3 className="font-display text-lg text-blood">Easy to miss</h3>
         <p className="mt-1 text-xs text-faded">
           Easy to skip in lectures — exams and code reviews love these.
         </p>
@@ -66,29 +85,59 @@ export function NoteSections({
       </p>
 
       {cards.length > 0 ? (
-        <section className="space-y-4">
-          <h3 className="font-display text-lg text-parchment">Deep dive cards</h3>
-          {cards.map((card) => (
-            <article
-              key={card.id}
-              className="rounded-xl border border-edge bg-panel/80 p-4"
-            >
-              <h4 className="font-display text-base text-rune">{card.title}</h4>
-              <p className="mt-1 text-sm text-faded">{card.summary}</p>
-              <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-parchment">
-                {card.theory.map((t) => (
-                  <li key={t}>{t}</li>
-                ))}
-              </ul>
-              <div className="mt-3">
-                <SpellTablet code={card.snippet} filename="Card.java" />
+        <section className="space-y-2">
+          <h3 className="font-display text-lg text-parchment">
+            Deep dives{' '}
+            <span className="font-mono text-sm text-faded">
+              ({cards.length})
+            </span>
+          </h3>
+          <p className="text-xs text-faded">
+            Closed by default — open one if you need more detail.
+          </p>
+          {cards.map((card) => {
+            const open = openCardId === card.id
+            return (
+              <div
+                key={card.id}
+                className="overflow-hidden rounded-xl border border-edge bg-panel/80"
+              >
+                <button
+                  type="button"
+                  aria-expanded={open}
+                  onClick={() => setOpenCardId(open ? null : card.id)}
+                  className={cn(
+                    'flex w-full items-center justify-between gap-3 px-4 py-3 text-left',
+                    open && 'border-b border-edge',
+                  )}
+                >
+                  <span className="font-display text-base text-rune">
+                    {card.title}
+                  </span>
+                  <span className="font-mono text-xs text-faded">
+                    {open ? 'Hide' : 'Show'}
+                  </span>
+                </button>
+                {open ? (
+                  <div className="px-4 py-3">
+                    <p className="text-sm text-faded">{card.summary}</p>
+                    <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-parchment">
+                      {card.theory.map((t) => (
+                        <li key={t}>{t}</li>
+                      ))}
+                    </ul>
+                    <div className="mt-3">
+                      <SpellTablet code={card.snippet} filename="Card.java" />
+                    </div>
+                    <p className="mt-2 text-sm text-blood">
+                      <span className="font-semibold">Trap. </span>
+                      {card.trap}
+                    </p>
+                  </div>
+                ) : null}
               </div>
-              <p className="mt-2 text-sm text-blood">
-                <span className="font-semibold">Trap. </span>
-                {card.trap}
-              </p>
-            </article>
-          ))}
+            )
+          })}
         </section>
       ) : null}
     </div>

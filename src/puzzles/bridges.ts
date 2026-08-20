@@ -1,16 +1,6 @@
 import type { Puzzle } from './types'
 import { joinLines as j } from './types'
 
-function conceptStub(className: string, comment: string): string {
-  return j([
-    `public class ${className} {`,
-    '    public static void main(String[] args) {',
-    `        System.out.println("${comment}");`,
-    '    }',
-    '}',
-  ])
-}
-
 /** Theory ↔ real-code concept bridges (second seal on an existing room). */
 export const BRIDGE_PUZZLES: Puzzle[] = [
   {
@@ -19,7 +9,21 @@ export const BRIDGE_PUZZLES: Puzzle[] = [
     title: 'API Fence',
     prompt:
       'A banking app ships Account with public BigDecimal balance. Why is that a production problem, not just “bad style”?',
-    code: conceptStub('ApiFence', 'encap'),
+    code: j([
+      'import java.math.BigDecimal;',
+      '',
+      'class Account {',
+      '    public BigDecimal balance; // callers can write anything',
+      '}',
+      '',
+      'public class ApiFence {',
+      '    public static void main(String[] args) {',
+      '        Account a = new Account();',
+      '        a.balance = new BigDecimal("-999");',
+      '        System.out.println(a.balance);',
+      '    }',
+      '}',
+    ]),
     choices: [
       {
         id: 'a',
@@ -54,8 +58,28 @@ export const BRIDGE_PUZZLES: Puzzle[] = [
     kind: 'concept',
     title: 'Listener Leak',
     prompt:
-      'A Widget constructor does EventBus.register(this) before assigning title. A listener immediately reads widget.title. What can go wrong?',
-    code: conceptStub('ListenerLeak', 'leak'),
+      'A Widget constructor registers this on a static listener list before assigning title. What can go wrong?',
+    code: j([
+      'import java.util.ArrayList;',
+      'import java.util.List;',
+      '',
+      'class Widget {',
+      '    static final List<Widget> listeners = new ArrayList<>();',
+      '    String title;',
+      '',
+      '    Widget(String title) {',
+      '        listeners.add(this); // leaked before title is set',
+      '        this.title = title;',
+      '    }',
+      '}',
+      '',
+      'public class ListenerLeak {',
+      '    public static void main(String[] args) {',
+      '        new Widget("ok");',
+      '        System.out.println(Widget.listeners.get(0).title);',
+      '    }',
+      '}',
+    ]),
     choices: [
       {
         id: 'a',
@@ -63,16 +87,16 @@ export const BRIDGE_PUZZLES: Puzzle[] = [
           'Listeners may observe a half-built object (title still null) — classic leaking-this.',
       },
       { id: 'b', label: 'Constructors cannot call methods.' },
-      { id: 'c', label: 'EventBus makes title final automatically.' },
+      { id: 'c', label: 'Static lists make title final automatically.' },
       { id: 'd', label: 'Nothing — construction is always invisible to other code.' },
     ],
     correctId: 'a',
     hint: 'Publishing this before fields are set lets outsiders see defaults.',
     explanation:
-      'During construction, fields hold defaults until assigned. Registering this early lets other threads or re-entrant listeners read unfinished state. Finish construction, then publish.',
+      'During construction, fields hold defaults until assigned. Registering this early lets other code read unfinished state. Finish construction, then publish.',
     explanationSteps: [
       'this exists before the constructor finishes.',
-      'title is still null when EventBus may notify.',
+      'title is still null when the list already holds this.',
       'Listeners assume a ready object.',
       'Register after fields are set (or use factories).',
     ],
@@ -80,7 +104,7 @@ export const BRIDGE_PUZZLES: Puzzle[] = [
     expectCompile: 'ok',
     wrongReasons: {
       b: 'Constructors call methods all the time — timing is the issue.',
-      c: 'EventBus does not change field initialization rules.',
+      c: 'A static list does not change field initialization rules.',
       d: 'Other code can see this as soon as you publish it.',
     },
     commonTrap: 'Assuming “still in the constructor” means no other code can touch the object.',
@@ -90,8 +114,24 @@ export const BRIDGE_PUZZLES: Puzzle[] = [
     kind: 'concept',
     title: 'Library Border',
     prompt:
-      'Your library package util has package-private Helper. App code in another package subclasses and tries to use Helper. Why does the design block that?',
-    code: conceptStub('LibraryBorder', 'pkg'),
+      'Your library package util has package-private Helper. App code in another package tries to use Helper. Why does the design block that?',
+    code: j([
+      'package util;',
+      '',
+      'class Helper {',
+      '    void tidy() {',
+      '        System.out.println("internal");',
+      '    }',
+      '}',
+      '',
+      '// package app; cannot call new util.Helper().tidy()',
+      '',
+      'public class LibraryBorder {',
+      '    public static void main(String[] args) {',
+      '        new Helper().tidy(); // same package — ok',
+      '    }',
+      '}',
+    ]),
     choices: [
       {
         id: 'a',
@@ -127,7 +167,20 @@ export const BRIDGE_PUZZLES: Puzzle[] = [
     title: 'Logger Overload',
     prompt:
       'API has log(Object) and log(String). You write Object msg = "hi"; log(msg). Which overload runs, and why does this bite in real apps?',
-    code: conceptStub('LoggerOverload', 'overload'),
+    code: j([
+      'public class LoggerOverload {',
+      '    static void log(Object o) {',
+      '        System.out.println("obj");',
+      '    }',
+      '    static void log(String s) {',
+      '        System.out.println("str");',
+      '    }',
+      '    public static void main(String[] args) {',
+      '        Object msg = "hi";',
+      '        log(msg); // declared type Object → log(Object)',
+      '    }',
+      '}',
+    ]),
     choices: [
       {
         id: 'a',
@@ -162,8 +215,26 @@ export const BRIDGE_PUZZLES: Puzzle[] = [
     kind: 'concept',
     title: 'Plugin Default',
     prompt:
-      'interface Plugin { default void start() {} } and abstract class Service { abstract void start(); }. class App extends Service implements Plugin — why is this a common plugin footgun?',
-    code: conceptStub('PluginDefault', 'default'),
+      'interface Plugin { default void start() {} } and abstract class Service { abstract void start(); }. Why does class App extends Service implements Plugin fail to compile?',
+    code: j([
+      'abstract class Service {',
+      '    abstract void start();',
+      '}',
+      '',
+      'interface Plugin {',
+      '    default void start() {',
+      '        System.out.println("plugin");',
+      '    }',
+      '}',
+      '',
+      '// class App extends Service implements Plugin {} // does not compile',
+      '',
+      'public class PluginDefault {',
+      '    public static void main(String[] args) {',
+      '        System.out.println("default");',
+      '    }',
+      '}',
+    ]),
     choices: [
       {
         id: 'a',
@@ -199,7 +270,30 @@ export const BRIDGE_PUZZLES: Puzzle[] = [
     title: 'Cache Miss',
     prompt:
       'A shop caches Product in a HashSet. Product overrides equals by id but not hashCode. Orders “lose” products. Why?',
-    code: conceptStub('CacheMiss', 'hash'),
+    code: j([
+      'import java.util.HashSet;',
+      'import java.util.Objects;',
+      'import java.util.Set;',
+      '',
+      'class Product {',
+      '    final int id;',
+      '    Product(int id) { this.id = id; }',
+      '    @Override',
+      '    public boolean equals(Object o) {',
+      '        return o instanceof Product p && p.id == id;',
+      '    }',
+      '    // missing hashCode() — HashSet can miss equals matches',
+      '}',
+      '',
+      'public class CacheMiss {',
+      '    public static void main(String[] args) {',
+      '        Set<Product> set = new HashSet<>();',
+      '        set.add(new Product(1));',
+      '        System.out.println(set.contains(new Product(1)));',
+      '        System.out.println(Objects.hash(1));',
+      '    }',
+      '}',
+    ]),
     choices: [
       {
         id: 'a',
@@ -235,7 +329,24 @@ export const BRIDGE_PUZZLES: Puzzle[] = [
     title: 'Event Cast',
     prompt:
       'A message bus delivers Object payload. Handler does ((PaymentEvent) payload).process() with no check. What is the real failure mode?',
-    code: conceptStub('EventCast', 'cast'),
+    code: j([
+      'class PaymentEvent {',
+      '    void process() {',
+      '        System.out.println("pay");',
+      '    }',
+      '}',
+      '',
+      'class RefundEvent {}',
+      '',
+      'public class EventCast {',
+      '    static void onMessage(Object payload) {',
+      '        ((PaymentEvent) payload).process(); // ClassCastException if wrong type',
+      '    }',
+      '    public static void main(String[] args) {',
+      '        onMessage(new PaymentEvent());',
+      '    }',
+      '}',
+    ]),
     choices: [
       {
         id: 'a',
@@ -271,7 +382,20 @@ export const BRIDGE_PUZZLES: Puzzle[] = [
     title: 'Status Codes',
     prompt:
       'An HTTP client API uses String status with values "OPEN"/"CLOSED". Why is enum Status better for a public library?',
-    code: conceptStub('StatusCodes', 'enum'),
+    code: j([
+      'enum Status {',
+      '    OPEN,',
+      '    CLOSED',
+      '}',
+      '',
+      'public class StatusCodes {',
+      '    public static void main(String[] args) {',
+      '        Status s = Status.OPEN;',
+      '        // String typo "OPNE" would still compile — enum prevents it',
+      '        System.out.println(s.name());',
+      '    }',
+      '}',
+    ]),
     choices: [
       {
         id: 'a',
@@ -307,7 +431,21 @@ export const BRIDGE_PUZZLES: Puzzle[] = [
     title: 'Raw Legacy',
     prompt:
       'Legacy module returns raw List. Callers cast (String) list.get(0). What did List<String> buy modern code?',
-    code: conceptStub('RawLegacy', 'generics'),
+    code: j([
+      'import java.util.ArrayList;',
+      'import java.util.List;',
+      '',
+      'public class RawLegacy {',
+      '    public static void main(String[] args) {',
+      '        List raw = new ArrayList();',
+      '        raw.add(42);',
+      '        List<String> typed = new ArrayList<>();',
+      '        typed.add("ok");',
+      '        // typed.add(42); // compile error — generics catch this early',
+      '        System.out.println(typed.get(0));',
+      '    }',
+      '}',
+    ]),
     choices: [
       {
         id: 'a',

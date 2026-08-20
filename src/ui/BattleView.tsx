@@ -8,6 +8,7 @@ import { useGame } from '../store/gameStore'
 import { AnswerPanel } from './AnswerPanel'
 import { HealthBar } from './HealthBar'
 import { SpellTablet } from './SpellTablet'
+import { StickyActionBar } from './StickyActionBar'
 
 export function BattleView() {
   const state = useGame((s) => s.state)
@@ -25,11 +26,11 @@ export function BattleView() {
         const choice = puzzle.choices[Number(event.key) - 1]
         if (choice) selectChoice(choice.id)
       }
-      if (event.key === 'Enter') submit()
+      if (event.key === 'Enter' && state.selectedChoiceId) submit()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [puzzle, selectChoice, submit])
+  }, [puzzle, selectChoice, submit, state.selectedChoiceId])
 
   if (!puzzle || !room || !enemy) {
     return <p className="p-8 text-center text-faded">No challenge loaded.</p>
@@ -45,7 +46,7 @@ export function BattleView() {
       : null
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-6 fade-up">
+    <main className="mx-auto max-w-5xl px-4 pb-4 pt-6 fade-up">
       <div className="mb-5 grid gap-4 rounded-xl border border-edge bg-panel/80 p-4 sm:grid-cols-[1fr_12rem]">
         <div>
           <p className="font-mono text-xs uppercase tracking-widest text-sigil">
@@ -129,8 +130,10 @@ export function BattleView() {
         />
       </div>
 
-      <div className="mt-5 flex items-center justify-between gap-3">
-        <p className="text-xs text-faded">Shortcuts: 1–4 select · Enter check</p>
+      <StickyActionBar>
+        <p className="mr-auto hidden text-xs text-faded sm:block">
+          Shortcuts: 1–4 select · Enter check
+        </p>
         <button
           type="button"
           onClick={submit}
@@ -139,7 +142,7 @@ export function BattleView() {
         >
           Check answer
         </button>
-      </div>
+      </StickyActionBar>
     </main>
   )
 }
