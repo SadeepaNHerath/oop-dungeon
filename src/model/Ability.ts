@@ -5,7 +5,7 @@ export interface PresentedAttack {
   kindLabel: string
 }
 
-/** Strategy: how a challenge presents a puzzle type. */
+/** Strategy: how an enemy presents a puzzle type in the arena. */
 export interface AttackStrategy {
   present(puzzle: Puzzle): PresentedAttack
 }
@@ -13,7 +13,7 @@ export interface AttackStrategy {
 export class OutputSpell implements AttackStrategy {
   present(puzzle: Puzzle): PresentedAttack {
     return {
-      banner: `Output check — ${puzzle.title}`,
+      banner: `Code spell — ${puzzle.title}`,
       kindLabel: 'What is the exact output?',
     }
   }
@@ -22,7 +22,7 @@ export class OutputSpell implements AttackStrategy {
 export class CompileHex implements AttackStrategy {
   present(puzzle: Puzzle): PresentedAttack {
     return {
-      banner: `Compile check — ${puzzle.title}`,
+      banner: `Corruption hex — ${puzzle.title}`,
       kindLabel: 'Why does this fail to compile?',
     }
   }
@@ -31,7 +31,7 @@ export class CompileHex implements AttackStrategy {
 export class RuntimeCurse implements AttackStrategy {
   present(puzzle: Puzzle): PresentedAttack {
     return {
-      banner: `Runtime check — ${puzzle.title}`,
+      banner: `Runtime curse — ${puzzle.title}`,
       kindLabel: 'What happens when this runs?',
     }
   }
@@ -40,7 +40,7 @@ export class RuntimeCurse implements AttackStrategy {
 export class RefactorCharm implements AttackStrategy {
   present(puzzle: Puzzle): PresentedAttack {
     return {
-      banner: `Fix check — ${puzzle.title}`,
+      banner: `Broken seal — ${puzzle.title}`,
       kindLabel: 'Which snippet compiles and fixes the bug?',
     }
   }
@@ -49,7 +49,7 @@ export class RefactorCharm implements AttackStrategy {
 export class ConceptWard implements AttackStrategy {
   present(puzzle: Puzzle): PresentedAttack {
     return {
-      banner: `Concept check — ${puzzle.title}`,
+      banner: `Lore ward — ${puzzle.title}`,
       kindLabel: 'Which statement is correct?',
     }
   }

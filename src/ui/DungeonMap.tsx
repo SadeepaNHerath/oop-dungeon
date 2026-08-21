@@ -22,6 +22,9 @@ export function DungeonMap() {
             Level {zone.displayNumber} — {zone.friendlyName}
           </h1>
           <p className="mt-1 text-faded">{zone.topic}</p>
+          <p className="mt-2 text-sm text-rune">
+            Clear seals in order — each node is a fight.
+          </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <button
@@ -31,7 +34,7 @@ export function DungeonMap() {
             }
             className="rounded-md border border-sigil/40 px-3 py-1.5 text-sm text-sigil hover:bg-panel"
           >
-            Lesson notes
+            Review lesson
           </button>
           <button
             type="button"
@@ -89,7 +92,7 @@ export function DungeonMap() {
                 'absolute w-40 -translate-x-1/2 -translate-y-1/2 rounded-xl border px-2 py-2 text-center transition',
                 cleared && 'border-moss/50 bg-panel text-moss',
                 clickable &&
-                  'border-rune bg-panel text-parchment shadow-[0_0_18px_rgba(232,184,109,0.25)] hover:bg-panel-2',
+                  'node-pulse border-rune bg-panel text-parchment hover:bg-panel-2',
                 locked && 'cursor-not-allowed border-edge bg-ink-2 text-faded/50',
                 room.isBoss && clickable && 'border-blood text-rune',
               )}
@@ -101,7 +104,7 @@ export function DungeonMap() {
               <span className="mt-0.5 block text-[11px] leading-tight text-faded">
                 {room.topic}
                 {room.puzzleIds.length > 1
-                  ? ` · ${room.puzzleIds.length} parts`
+                  ? ` · ${room.puzzleIds.length} seals`
                   : ''}
               </span>
             </button>

@@ -21,17 +21,17 @@ export function Roadmap() {
   return (
     <main className="mx-auto max-w-xl px-4 py-10 fade-up">
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-sigil">
-        Overnight path
+        Bytecode Arena · overnight path
       </p>
       <h1 className="mt-2 font-display text-3xl text-parchment">
         Java OOP roadmap
       </h1>
       <p className="mt-2 text-faded">
-        Level {Math.min(doneLevels + 1, 9)} of 9 · theory → real-code traps →
-        check → practice. Finish before your exam.
+        Level {Math.min(doneLevels + 1, 9)} of 9 · guided lesson → warm-up →
+        arena. Finish before your exam.
       </p>
       <p className="mt-1 text-sm text-rune">
-        ~ one night · easy-to-miss traps · Secrets unlock at the end
+        ~ one night · play the fights · Secrets unlock at the end
       </p>
 
       <ol className="mt-10 space-y-0">
@@ -92,9 +92,13 @@ export function Roadmap() {
                   </h2>
                   <p className="mt-1 text-sm text-faded">{zone.topic}</p>
                   <p className="mt-2 font-mono text-xs text-rune">
-                    {done}/{total} challenges
+                    {complete
+                      ? 'Arena cleared'
+                      : quizDone
+                        ? `${done}/${total} arena seals`
+                        : 'Lesson → warm-up → arena'}
                     <span className="ml-2 text-faded">
-                      · check {quizDone ? 'done' : 'open'}
+                      · warm-up {quizDone ? 'done' : 'open'}
                     </span>
                   </p>
                 </button>

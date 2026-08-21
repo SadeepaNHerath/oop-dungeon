@@ -6,6 +6,7 @@ import { currentPuzzle } from '../core/selectors'
 import { strategyFor } from '../model/Ability'
 import { useGame } from '../store/gameStore'
 import { AnswerPanel } from './AnswerPanel'
+import { cn } from './cn'
 import { HealthBar } from './HealthBar'
 import { SpellTablet } from './SpellTablet'
 import { StickyActionBar } from './StickyActionBar'
@@ -33,7 +34,7 @@ export function BattleView() {
   }, [puzzle, selectChoice, submit, state.selectedChoiceId])
 
   if (!puzzle || !room || !enemy) {
-    return <p className="p-8 text-center text-faded">No challenge loaded.</p>
+    return <p className="p-8 text-center text-faded">No encounter loaded.</p>
   }
 
   const attack = strategyFor(puzzle.kind).present(puzzle)
@@ -42,7 +43,7 @@ export function BattleView() {
   const canReveal = state.missCount >= MISSES_BEFORE_LESSON && !revealed
   const stage =
     room.puzzleIds.length > 1
-      ? `Part ${state.puzzleIndex + 1} of ${room.puzzleIds.length}`
+      ? `Seal ${state.puzzleIndex + 1} of ${room.puzzleIds.length}`
       : null
 
   return (
@@ -50,7 +51,7 @@ export function BattleView() {
       <div className="mb-5 grid gap-4 rounded-xl border border-edge bg-panel/80 p-4 sm:grid-cols-[1fr_12rem]">
         <div>
           <p className="font-mono text-xs uppercase tracking-widest text-sigil">
-            {attack.banner}
+            Arena encounter · {attack.banner}
           </p>
           <h1 className="mt-1 font-display text-2xl text-parchment">
             {enemy.name}
@@ -65,7 +66,7 @@ export function BattleView() {
           value={state.enemyHp}
           max={state.enemyMaxHp}
           tone="enemy"
-          label="Challenge"
+          label="Enemy"
         />
       </div>
 
@@ -75,13 +76,16 @@ export function BattleView() {
       <SpellTablet key={puzzle.id} code={puzzle.code} files={puzzle.files} />
 
       {miss ? (
-        <div className="mt-4 space-y-2">
+        <div
+          key={state.hpPulseKey}
+          className={cn('mt-4 space-y-2', 'panel-shake')}
+        >
           <div className="rounded-lg border border-blood/40 bg-blood/10 px-4 py-3 text-sm text-parchment">
             <p className="font-semibold text-blood">What went wrong</p>
             <p className="mt-1">
               {state.lastFeedback?.wrongReason ?? state.lastFeedback?.hint}
             </p>
-            <p className="mt-2 text-xs text-faded">You lost 15 HP.</p>
+            <p className="mt-2 text-xs text-faded">The counter-spell failed — 15 HP.</p>
           </div>
           {state.lastFeedback?.commonTrap ? (
             <p className="rounded-lg border border-rune/30 bg-panel px-4 py-3 text-sm text-parchment">
@@ -132,7 +136,7 @@ export function BattleView() {
 
       <StickyActionBar>
         <p className="mr-auto hidden text-xs text-faded sm:block">
-          Shortcuts: 1–4 select · Enter check
+          Shortcuts: 1–4 select · Enter cast
         </p>
         <button
           type="button"
@@ -140,7 +144,7 @@ export function BattleView() {
           disabled={!state.selectedChoiceId}
           className="rounded-lg bg-rune px-5 py-2.5 font-semibold text-ink enabled:hover:bg-rune-dim disabled:cursor-not-allowed disabled:opacity-40"
         >
-          Check answer
+          Cast counter-spell
         </button>
       </StickyActionBar>
     </main>

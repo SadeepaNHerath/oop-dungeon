@@ -31,7 +31,7 @@ export function MiniQuiz() {
   }, [question, selectQuizChoice, submitQuiz])
 
   if (!zone || !quiz || !question) {
-    return <p className="p-8 text-faded">Quick check not found.</p>
+    return <p className="p-8 text-faded">Warm-up round not found.</p>
   }
 
   const progress = ((state.quizIndex + 1) / quiz.questions.length) * 100
@@ -39,7 +39,7 @@ export function MiniQuiz() {
   return (
     <main className="mx-auto max-w-2xl px-4 pb-4 pt-10 fade-up">
       <p className="font-mono text-xs uppercase tracking-widest text-sigil">
-        {levelLabel(zone)} · Quick check · {state.quizIndex + 1}/
+        {levelLabel(zone)} · Warm-up round · {state.quizIndex + 1}/
         {quiz.questions.length}
       </p>
       <div
@@ -58,8 +58,7 @@ export function MiniQuiz() {
         {question.prompt}
       </h1>
       <p className="mt-1 text-sm text-faded">
-        No HP cost. Answer every question correctly to open practice.
-        Unlimited retries.
+        No HP cost — warm up before the arena. Unlimited retries.
       </p>
 
       <div className="mt-6 grid gap-3">
@@ -99,7 +98,7 @@ export function MiniQuiz() {
           className="rounded-lg bg-rune px-5 py-3 font-semibold text-ink enabled:hover:bg-rune-dim disabled:opacity-40"
         >
           {state.quizIndex >= quiz.questions.length - 1
-            ? 'Finish check'
+            ? 'Enter the arena'
             : 'Next question'}
         </button>
         <button
@@ -107,7 +106,7 @@ export function MiniQuiz() {
           onClick={backToNotes}
           className="rounded-lg border border-edge px-5 py-3 text-faded hover:text-parchment"
         >
-          Back to notes
+          Back to lesson
         </button>
         <button
           type="button"

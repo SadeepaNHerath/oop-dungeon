@@ -26,15 +26,14 @@ export function TitleScreen({ onOpenStudy }: TitleScreenProps) {
   return (
     <main className="mx-auto flex min-h-svh max-w-2xl flex-col justify-center px-6 py-16 fade-up">
       <p className="font-mono text-sm uppercase tracking-[0.25em] text-sigil">
-        Overnight Java OOP
+        Bytecode Arena
       </p>
       <h1 className="mt-3 font-display text-5xl font-medium leading-tight text-parchment sm:text-6xl">
-        Finish this roadmap before your exam
+        Overnight exam path
       </h1>
       <p className="mt-4 text-lg text-faded">
-        Nine levels · theory → real-code traps → quick check → practice. Learn
-        the under-taught points where OOP meets production; unlock the Secrets
-        vault when you clear them all.
+        Guided lesson → warm-up round → arena challenges. Nine levels. Unlock the
+        Secrets vault when you clear them all.
       </p>
 
       <form onSubmit={onStart} className="mt-10 space-y-4">
@@ -53,7 +52,7 @@ export function TitleScreen({ onOpenStudy }: TitleScreenProps) {
             type="submit"
             className="rounded-lg bg-rune px-5 py-3 font-semibold text-ink hover:bg-rune-dim"
           >
-            Start the roadmap
+            Enter the arena
           </button>
           <button
             type="button"
@@ -75,16 +74,15 @@ export function TitleScreen({ onOpenStudy }: TitleScreenProps) {
       </form>
 
       <section className="mt-12 rounded-xl border border-edge bg-panel/70 p-5">
-        <h2 className="font-display text-xl text-rune">How to use this</h2>
+        <h2 className="font-display text-xl text-rune">How it plays</h2>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-faded">
-          <li>~ one night · 9 levels · theory → real-code traps → check → practice.</li>
-          <li>Levels unlock in order. Pass the quick check to open challenges.</li>
+          <li>Short guided lesson — one idea per screen, then warm-up.</li>
+          <li>Arena fights: cast answers, learn from misses, break seals.</li>
           <li>
-            Wrong answers cost 15 HP but teach what you believed wrongly. After
-            two misses you can show the full lesson. Keys{' '}
+            After two misses you can show the full lesson. Keys{' '}
             <kbd className="text-parchment">1</kbd>–
             <kbd className="text-parchment">4</kbd> select,{' '}
-            <kbd className="text-parchment">Enter</kbd> checks.
+            <kbd className="text-parchment">Enter</kbd> casts.
           </li>
         </ol>
       </section>

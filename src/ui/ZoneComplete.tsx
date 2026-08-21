@@ -14,12 +14,12 @@ export function ZoneComplete() {
   const next = zoneId ? nextLevel(zoneId) : null
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-16 fade-up">
+    <main className="mx-auto max-w-2xl px-4 py-16 celebrate-in">
       <p className="font-mono text-sm uppercase tracking-widest text-sigil">
-        Level complete
+        Arena cleared
       </p>
       <h1 className="mt-2 font-display text-4xl text-parchment">
-        {zone ? `${levelLabel(zone)} — ${zone.friendlyName}` : 'Level'} done,{' '}
+        {zone ? `${levelLabel(zone)} — ${zone.friendlyName}` : 'Level'} yields,{' '}
         {name}
       </h1>
       <p className="mt-3 text-faded">
