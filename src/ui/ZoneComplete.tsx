@@ -19,7 +19,7 @@ export function ZoneComplete() {
         Arena cleared
       </p>
       <h1 className="mt-2 font-display text-4xl text-parchment">
-        {zone ? `${levelLabel(zone)} — ${zone.friendlyName}` : 'Level'} yields,{' '}
+        {zone ? `${levelLabel(zone)}: ${zone.friendlyName}` : 'Level'} yields,{' '}
         {name}
       </h1>
       <p className="mt-3 text-faded">
@@ -55,7 +55,7 @@ export function ZoneComplete() {
             onClick={() => enterZone(next.id)}
             className="rounded-lg bg-rune px-5 py-3 font-semibold text-ink hover:bg-rune-dim"
           >
-            Next: {levelLabel(next)} — {next.friendlyName}
+            Next: {levelLabel(next)}: {next.friendlyName}
           </button>
         ) : (
           <button

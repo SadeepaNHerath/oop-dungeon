@@ -58,7 +58,7 @@ export function MiniQuiz() {
         {question.prompt}
       </h1>
       <p className="mt-1 text-sm text-faded">
-        No HP cost — warm up before the arena. Unlimited retries.
+        No HP cost. Warm up before the arena. Unlimited retries.
       </p>
 
       <div className="mt-6 grid gap-3">

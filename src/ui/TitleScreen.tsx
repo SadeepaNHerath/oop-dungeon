@@ -76,11 +76,11 @@ export function TitleScreen({ onOpenStudy }: TitleScreenProps) {
       <section className="mt-12 rounded-xl border border-edge bg-panel/70 p-5">
         <h2 className="font-display text-xl text-rune">How it plays</h2>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-faded">
-          <li>Short guided lesson — one idea per screen, then warm-up.</li>
+          <li>Short guided lesson. One idea per screen, then warm-up.</li>
           <li>Arena fights: cast answers, learn from misses, break seals.</li>
           <li>
             After two misses you can show the full lesson. Keys{' '}
-            <kbd className="text-parchment">1</kbd>–
+            <kbd className="text-parchment">1</kbd> to 
             <kbd className="text-parchment">4</kbd> select,{' '}
             <kbd className="text-parchment">Enter</kbd> casts.
           </li>

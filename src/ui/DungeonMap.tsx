@@ -19,11 +19,11 @@ export function DungeonMap() {
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="font-display text-3xl text-parchment">
-            Level {zone.displayNumber} — {zone.friendlyName}
+            Level {zone.displayNumber}: {zone.friendlyName}
           </h1>
           <p className="mt-1 text-faded">{zone.topic}</p>
           <p className="mt-2 text-sm text-rune">
-            Clear seals in order — each node is a fight.
+            Clear seals in order. Each node is a fight.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

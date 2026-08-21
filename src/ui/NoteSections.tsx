@@ -61,7 +61,7 @@ export function NoteSections({
       <section>
         <h3 className="font-display text-lg text-blood">Easy to miss</h3>
         <p className="mt-1 text-xs text-faded">
-          Easy to skip in lectures — exams and code reviews love these.
+          Easy to skip in lectures, but exams and code reviews love these.
         </p>
         <ul className={listClass}>
           {note.untouchables.map((item) => (
@@ -93,7 +93,7 @@ export function NoteSections({
             </span>
           </h3>
           <p className="text-xs text-faded">
-            Closed by default — open one if you need more detail.
+            Closed by default. Open one if you need more detail.
           </p>
           {cards.map((card) => {
             const open = openCardId === card.id

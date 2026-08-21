@@ -147,7 +147,7 @@ export function Roadmap() {
               </h2>
               <p className="mt-1 text-sm text-faded">
                 {courseComplete
-                  ? 'Full exam pack — every level’s notes and common mistakes.'
+                  ? 'Full exam pack: every level’s notes and common mistakes.'
                   : 'Unlocks when all 9 levels’ challenges are cleared.'}
               </p>
             </button>

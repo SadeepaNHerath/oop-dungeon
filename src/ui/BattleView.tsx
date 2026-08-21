@@ -85,7 +85,7 @@ export function BattleView() {
             <p className="mt-1">
               {state.lastFeedback?.wrongReason ?? state.lastFeedback?.hint}
             </p>
-            <p className="mt-2 text-xs text-faded">The counter-spell failed — 15 HP.</p>
+            <p className="mt-2 text-xs text-faded">The counter-spell failed. 15 HP lost.</p>
           </div>
           {state.lastFeedback?.commonTrap ? (
             <p className="rounded-lg border border-rune/30 bg-panel px-4 py-3 text-sm text-parchment">
@@ -136,7 +136,7 @@ export function BattleView() {
 
       <StickyActionBar>
         <p className="mr-auto hidden text-xs text-faded sm:block">
-          Shortcuts: 1–4 select · Enter cast
+          Shortcuts: 1 to 4 select · Enter cast
         </p>
         <button
           type="button"

@@ -28,7 +28,7 @@ export function SecretsVault() {
         Course complete
       </p>
       <h1 className="mt-2 font-display text-4xl text-parchment">
-        OOP Secrets — exam pack
+        OOP Secrets Exam Pack
       </h1>
       <p className="mt-2 text-faded">
         Nice work, {name}. Jump a level, expand what you need, print the pack
@@ -69,7 +69,7 @@ export function SecretsVault() {
             return (
               <li key={note.zoneId}>
                 <span className="font-semibold">
-                  {levelLabel(zone)} — {zone.friendlyName}:
+                  {levelLabel(zone)}: {zone.friendlyName}:
                 </span>{' '}
                 {note.youCanExplain}
               </li>

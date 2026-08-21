@@ -47,7 +47,7 @@ export function Codex({ onClose }: CodexProps) {
           <div>
             <h2 className="font-display text-2xl text-parchment">Lesson notes</h2>
             <p className="text-sm text-faded">
-              Theory, real-code bridges, and under-taught traps — open anytime.
+              Theory, real-code bridges, and under-taught traps. Open anytime.
             </p>
           </div>
           <button
