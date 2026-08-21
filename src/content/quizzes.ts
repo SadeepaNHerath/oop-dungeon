@@ -68,7 +68,7 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
         'z0q5',
         'A team exposes public List<String> tags on a User object. What goes wrong in real code?',
         [
-          'Nothing — public fields are required in Java',
+          'Nothing. Public fields are required in Java',
           'Callers can mutate tags and break invariants; the field becomes an accidental API',
           'The list becomes immutable automatically',
           'Subclasses cannot see the field',
@@ -115,7 +115,7 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
       q(
         'z1q3',
         'Can an abstract class have a constructor?',
-        ['No', 'Yes — subclasses call it via super()', 'Only if public', 'Only static'],
+        ['No', 'Yes, subclasses call it via super()', 'Only if public', 'Only static'],
         1,
         'abstract blocks new Abstract(), not constructors.',
       ),
@@ -135,7 +135,7 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
         'z1q5',
         'A constructor registers this on a global listener list before assigning fields. Risk?',
         [
-          'None — construction is atomic to all threads always',
+          'None. Construction is always atomic to all threads',
           'Listeners may observe default field values on a half-built object',
           'The object cannot be garbage collected',
           'super() is skipped',
@@ -265,7 +265,7 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
           'Both methods run',
         ],
         1,
-        'Overloads use declared types — a common production surprise.',
+        'Overloads use declared types. This is a common production surprise.',
       ),
       q(
         'z3q6',
@@ -343,8 +343,8 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
         'z4q6',
         'Plugin code: abstract Service has abstract start(); interface Hook has default start(). A concrete class extends Service implements Hook. Result?',
         [
-          'Compiles — default fills the abstract method',
-          'Does not compile — defaults do not satisfy superclass abstract methods',
+          'Compiles. Default fills the abstract method',
+          'Does not compile. Defaults do not satisfy superclass abstract methods',
           'Runtime picks randomly',
           'Only works if Hook is first',
         ],
@@ -359,7 +359,7 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
       q(
         'z5q1',
         'final List<String> xs = new ArrayList<>(); xs.add("a");',
-        ['Compile error', 'OK — reference fixed, list mutable', 'Clears the list', 'Makes xs null'],
+        ['Compile error', 'OK. Reference fixed, list mutable', 'Clears the list', 'Makes xs null'],
         1,
         'final locks the variable, not deep immutability.',
       ),
@@ -377,7 +377,7 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
       ),
       q(
         'z5q3',
-        'sealed class Shape permits Circle, Square — Triangle extends Shape:',
+        'sealed class Shape permits Circle, Square. Triangle extends Shape:',
         ['OK', 'Compile error', 'Runtime warning', 'OK if final'],
         1,
         'Only permitted direct subtypes may extend.',
@@ -399,7 +399,7 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
         'You put entities in a HashSet for a cache. You override equals but forget hashCode. Symptom?',
         [
           'Compile error',
-          'contains/get may miss logical duplicates — silent production bugs',
+          'contains/get may miss logical duplicates resulting in silent production bugs',
           'The set becomes a list',
           'equals is ignored forever',
         ],
@@ -426,7 +426,7 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
       q(
         'z6q1',
         'Animal a = new Dog(); a.bark() when bark is only on Dog:',
-        ['Runs Dog.bark', 'Compile error — not on Animal', 'ClassCastException', 'null'],
+        ['Runs Dog.bark', 'Compile error. Not on Animal', 'ClassCastException', 'null'],
         1,
         'Upcast limits the callable API to the declared type.',
       ),
@@ -538,7 +538,7 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
         'Why prefer enum Status { OPEN, CLOSED } over String status in an API?',
         [
           'Enums are slower',
-          'Typesafe closed set — typos and illegal values fail at compile time',
+          'Typesafe closed set. Typos and illegal values fail at compile time',
           'Strings cannot be compared',
           'Enums cannot be switched',
         ],
@@ -547,10 +547,10 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
       ),
       q(
         'z7q6',
-        'record Box(List<String> items) — is Box deeply immutable?',
+        'record Box(List<String> items). Is Box deeply immutable?',
         [
           'Yes always',
-          'No — the List component can still be mutated unless you copy/defend it',
+          'No. The List component can still be mutated unless you copy/defend it',
           'Only if the record is public',
           'Records cannot hold lists',
         ],
@@ -610,7 +610,7 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
         'Histor should hold a private Deque and expose push/pop. Why not extend ArrayList?',
         [
           'Deque is illegal',
-          'Extending ArrayList publishes every List method — clients depend on accidents',
+          'Extending ArrayList publishes every List method, so clients depend on accidents',
           'Composition is slower so never use it',
           'ArrayList cannot store Strings',
         ],
@@ -627,7 +627,7 @@ export const ZONE_QUIZZES: ZoneQuiz[] = [
           'Raw types are required in Java 17',
         ],
         1,
-        'Parameterized types move errors left — before production.',
+        'Parameterized types move errors left, before production.',
       ),
     ],
   },

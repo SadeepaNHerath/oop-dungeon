@@ -32,6 +32,11 @@ body {
   font-family: var(--font-sans);
 }
 
+::selection {
+  background-color: var(--color-rune-dim);
+  color: var(--color-ink);
+}
+
 #root {
   min-height: 100svh;
 }

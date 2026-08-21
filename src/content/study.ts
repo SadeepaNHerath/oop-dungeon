@@ -18,7 +18,7 @@ export const STUDY_CARDS: StudyCard[] = [
     theory: [
       'Dog a = new Dog("Rex"); Dog b = a; means two variables, one object.',
       'Methods run on an object’s state; static members belong to the class.',
-      'Exams ask “how many objects?” — count new, not variable names.',
+      'Exams ask “how many objects?”. You should count new, not variable names.',
     ],
     snippet:
       'Dog a = new Dog("Rex");\nDog b = a;\n// one object, two references',
@@ -29,7 +29,7 @@ export const STUDY_CARDS: StudyCard[] = [
     zoneId: 'z0',
     title: 'Encapsulation as API design',
     summary:
-      'private fields + controlled methods protect invariants — not just “Java style.”',
+      'private fields + controlled methods protect invariants. It is not just “Java style.”',
     theory: [
       'Callers should not depend on how you store data.',
       'Getters can return copies; setters can validate.',
@@ -151,7 +151,7 @@ export const STUDY_CARDS: StudyCard[] = [
     summary:
       'private methods do not override. A call that resolves to Parent.secret() inside Parent always runs Parent’s body.',
     theory: [
-      '@Override on a private method is a compile error — there is nothing to override.',
+      '@Override on a private method is a compile error because there is nothing to override.',
       'From outside the class you cannot write p.secret() if secret is private.',
       'A public method in Parent that calls secret() will still call Parent.secret(), even on a Child instance.',
     ],
@@ -330,7 +330,7 @@ export const STUDY_CARDS: StudyCard[] = [
     theory: [
       'Override both together. Use the same fields in both.',
       'Object’s default equals is identity (==). Default hashCode is identity-based.',
-      'If you override equals but not hashCode, HashSet/HashMap typically fail to find equal objects (contains returns false). That is a contract breach — treat it as broken design, not a language guarantee about every hash.',
+      'If you override equals but not hashCode, HashSet/HashMap typically fail to find equal objects (contains returns false). That is a contract breach and should be treated as broken design, not a language guarantee about every hash.',
     ],
     snippet:
       'set.add(new Coin(1));\nset.contains(new Coin(1)); // false if hashCode was not overridden',
@@ -386,7 +386,7 @@ export const STUDY_CARDS: StudyCard[] = [
     zoneId: 'z6',
     title: 'Casting safety',
     summary:
-      'Upcasts are free. Downcasts are promises to the compiler — the JVM can still throw ClassCastException.',
+      'Upcasts are free. Downcasts are promises to the compiler, but the JVM can still throw ClassCastException.',
     theory: [
       'Animal a = new Dog(); is an upcast; you only see Animal’s API.',
       '((Dog) a).bark() is safe only if a really is a Dog (or subtype).',
@@ -416,7 +416,7 @@ export const STUDY_CARDS: StudyCard[] = [
     zoneId: 'z6',
     title: 'super.method()',
     summary:
-      'From inside a subclass, super.m() calls the parent implementation — useful when you extend behavior.',
+      'From inside a subclass, super.m() calls the parent implementation. This is useful when you extend behavior.',
     theory: [
       'Override replaces the method for polymorphic callers.',
       'Inside the override you may still call super.m() for shared work.',
@@ -431,7 +431,7 @@ export const STUDY_CARDS: StudyCard[] = [
     zoneId: 'z7',
     title: 'Enums as API',
     summary:
-      'Enums are typesafe constant sets with name(), ordinal(), and values() — better than magic strings.',
+      'Enums are typesafe constant sets with name(), ordinal(), and values(). They are better than magic strings.',
     theory: [
       'enum Suit { HEARTS, CLUBS } defines a closed set of instances.',
       'Suit.HEARTS.name() returns "HEARTS".',
@@ -445,7 +445,7 @@ export const STUDY_CARDS: StudyCard[] = [
     zoneId: 'z7',
     title: 'Records are shallow',
     summary:
-      'Records give immutable carriers for components — but mutable component objects can still change.',
+      'Records give immutable carriers for components, but mutable component objects can still change.',
     theory: [
       'record Point(int x, int y) {} generates accessors, equals, hashCode, toString.',
       'record Box(List<String> items) {} does not deep-freeze the list.',
@@ -461,7 +461,7 @@ export const STUDY_CARDS: StudyCard[] = [
     summary:
       'toString for logs, equals/hashCode for collections, getClass for exact type.',
     theory: [
-      'Default toString is Class@identityHash — override for humans.',
+      'Default toString is Class@identityHash. You should override it for humans.',
       'getClass() is the exact runtime class; instanceof allows subtypes.',
       'Override equals and hashCode together for value types.',
     ],
@@ -491,7 +491,7 @@ export const STUDY_CARDS: StudyCard[] = [
       'List<String> catches wrong types at compile time. Raw List postpones pain to runtime.',
     theory: [
       'Type arguments are checked by the compiler.',
-      'Erasure removes them at runtime — you cannot new T().',
+      'Erasure removes them at runtime, so you cannot new T().',
       'Diamond <> infers the argument from context.',
     ],
     snippet: 'List<String> names = new ArrayList<>();\nnames.add("Ada");',

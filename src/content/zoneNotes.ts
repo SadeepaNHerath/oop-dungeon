@@ -19,12 +19,12 @@ export const ZONE_NOTES: ZoneNote[] = [
       'IS-A = inheritance (Dog extends Animal). HAS-A = composition (Car has Engine).',
     ],
     inPractice: [
-      'Public fields become your public API forever — callers will depend on them and you cannot change representation safely.',
+      'Public fields become your public API forever. Callers will depend on them and you cannot change representation safely.',
       'Teams prefer small classes with clear responsibilities over “god objects” that know everything.',
       'Libraries expose interfaces and factories so you depend on contracts, not concrete fields.',
     ],
     untouchables: [
-      'Two variables can point at the same object — assignment copies the reference, not a clone.',
+      'Two variables can point at the same object since assignment copies the reference, not a clone.',
       '“extends for reuse” when there is no true IS-A (e.g. Stack extends List) leaks a huge unwanted API.',
       'A class is not an object: counting variables ≠ counting instances.',
     ],
@@ -37,7 +37,7 @@ export const ZONE_NOTES: ZoneNote[] = [
   {
     zoneId: 'z1',
     title: 'Constructors',
-    why: 'Exams love print-order and “does this compile?” constructor questions — production loves half-built bugs.',
+    why: 'Exams love print-order and “does this compile?” constructor questions. Production loves half-built bugs.',
     bullets: [
       'Every ctor chains with this(...) or super(...) (else implicit super()).',
       'Init order: parent then child.',
@@ -56,7 +56,7 @@ export const ZONE_NOTES: ZoneNote[] = [
       'Calling overridable methods from a superclass constructor is a classic production footgun.',
     ],
     untouchables: [
-      'Fields are 0/false/null before your assignments run — early readers see defaults.',
+      'Fields are 0/false/null before your assignments run. Early readers see defaults.',
       'this() does not re-run instance initializers twice; they run with the ctor that calls super().',
       'If the parent has no no-arg ctor, empty subclass ctor still fails (implicit super()).',
     ],
@@ -69,7 +69,7 @@ export const ZONE_NOTES: ZoneNote[] = [
   {
     zoneId: 'z2',
     title: 'Access Rules',
-    why: 'Modifier mistakes are free exam points — and real package boundaries.',
+    why: 'Modifier mistakes are free exam points and also real package boundaries.',
     bullets: [
       'public / protected / package / private.',
       'JLS 6.6.2: protected via Super-typed ref across packages fails.',
@@ -87,7 +87,7 @@ export const ZONE_NOTES: ZoneNote[] = [
       'Overexposing protected invites fragile subclass coupling across products.',
     ],
     untouchables: [
-      'protected is not “any subclass, any reference” — the receiver’s compile-time type matters across packages.',
+      'protected is not “any subclass, any reference”. The receiver’s compile-time type matters across packages.',
       'Package-private is invisible to subclasses in another package.',
       'A public method calling a private helper always hits the declaring class’s private method (no polymorphic private).',
     ],
@@ -100,7 +100,7 @@ export const ZONE_NOTES: ZoneNote[] = [
   {
     zoneId: 'z3',
     title: 'Polymorphism',
-    why: 'Override vs hide and overload vs override are classic traps — and framework callback traps.',
+    why: 'Override vs hide and overload vs override are classic traps and also framework callback traps.',
     bullets: [
       'Instance methods: runtime type (override).',
       'static/fields: compile-time type (hide).',
@@ -113,13 +113,13 @@ export const ZONE_NOTES: ZoneNote[] = [
       'First pick the overload (compile-time), then dispatch overrides (runtime).',
     ],
     inPractice: [
-      'GUI/listeners and Spring beans: you hold a base type and expect the subclass override to run — that only works for instance methods.',
+      'GUI/listeners and Spring beans: you hold a base type and expect the subclass override to run. That only works for instance methods.',
       'Logging/helpers overloaded on Object vs String often pick the “wrong” overload because of declared types.',
       'Plugins register as Interface; the runtime implementation’s override is what executes.',
     ],
     untouchables: [
       'Overloads never dispatch on the argument’s runtime type.',
-      'Fields do not override — p.x is Parent.x even if Child has another x.',
+      'Fields do not override, so p.x is Parent.x even if Child has another x.',
       'Calling a static via an instance variable still uses the variable’s declared type.',
     ],
     youCanExplain:
@@ -131,7 +131,7 @@ export const ZONE_NOTES: ZoneNote[] = [
   {
     zoneId: 'z4',
     title: 'Interfaces',
-    why: 'default / static / diamond show up on modern papers — and in Collections/plugins.',
+    why: 'default / static / diamond show up on modern papers and in Collections/plugins.',
     bullets: [
       'default methods are inherited unless overridden.',
       'Interface static: Interface.m() only.',
@@ -139,7 +139,7 @@ export const ZONE_NOTES: ZoneNote[] = [
     ],
     theory: [
       'default methods are inherited unless the class overrides them.',
-      'Interface static methods: call Interface.m() only — not inherited.',
+      'Interface static methods: call Interface.m() only because they are not inherited.',
       'Two default methods with the same signature → class must override (A.super.m()).',
       'Interface fields are public static final constants.',
       'A class abstract method is not filled by an interface default.',
@@ -151,7 +151,7 @@ export const ZONE_NOTES: ZoneNote[] = [
     ],
     untouchables: [
       'Interface.default does not satisfy an abstract method from a superclass.',
-      'wizard.sage() fails for interface static sage — must be Spell.sage().',
+      'wizard.sage() fails for interface static sage. It must be Spell.sage().',
       'Interface fields look like instance fields in syntax but are public static final.',
     ],
     youCanExplain:
@@ -162,7 +162,7 @@ export const ZONE_NOTES: ZoneNote[] = [
   {
     zoneId: 'z5',
     title: 'Object Integrity',
-    why: 'final, equals/hashCode, and sealed close “object correctness” — HashSet will punish you.',
+    why: 'final, equals/hashCode, and sealed close “object correctness”. HashSet will punish you.',
     bullets: [
       'final blocks reassignment, not deep immutability.',
       'equals and hashCode must agree.',
@@ -181,7 +181,7 @@ export const ZONE_NOTES: ZoneNote[] = [
       'APIs that return live ArrayList fields let callers corrupt your object.',
     ],
     untouchables: [
-      'final List still allows list.add — final ≠ immutable.',
+      'final List still allows list.add, so final is not equal to immutable.',
       'Overriding only equals without hashCode breaks the contract HashMap relies on.',
       'instanceof-based equals in a subclass often breaks symmetry with the parent type.',
     ],
@@ -194,7 +194,7 @@ export const ZONE_NOTES: ZoneNote[] = [
   {
     zoneId: 'z6',
     title: 'Types & Casting',
-    why: 'Casting and abstract methods are everyday exam material — and UI handler crashes.',
+    why: 'Casting and abstract methods are everyday exam material and UI handler crashes.',
     bullets: [
       'Upcast is safe/implicit; downcast needs care.',
       'instanceof before downcast.',
@@ -208,7 +208,7 @@ export const ZONE_NOTES: ZoneNote[] = [
       'Abstract class = shared state/code + IS-A. Interface = capability (many).',
     ],
     inPractice: [
-      'Event handlers often cast Object payloads — missing instanceof → production ClassCastException.',
+      'Event handlers often cast Object payloads. Missing instanceof leads to production ClassCastException.',
       'APIs prefer polymorphism (call abstract/interface methods) over casting to concrete types.',
       'Template Method: abstract class defines the skeleton; subclasses fill abstract steps.',
     ],
@@ -226,7 +226,7 @@ export const ZONE_NOTES: ZoneNote[] = [
   {
     zoneId: 'z7',
     title: 'Nested Types & Object',
-    why: 'Enums, records, nested types, and Object methods show up on papers — and in APIs.',
+    why: 'Enums, records, nested types, and Object methods show up on papers and in APIs.',
     bullets: [
       'Inner vs static nested.',
       'Enums are typesafe constants with name().',
@@ -241,11 +241,11 @@ export const ZONE_NOTES: ZoneNote[] = [
     ],
     inPractice: [
       'Prefer enum for closed sets of modes/status over magic strings in APIs.',
-      'Records excel as DTOs — but a record of List is still a shallow shell around a mutable list.',
+      'Records excel as DTOs, but a record of List is still a shallow shell around a mutable list.',
       'Logging with default toString is useless in production incident debugging.',
     ],
     untouchables: [
-      'Suit.HEARTS.name() requires an enum — a String constant has no name().',
+      'Suit.HEARTS.name() requires an enum since a String constant has no name().',
       'Inner class instances keep a hidden Outer.this (memory / serialization implications).',
       'instanceof accepts subtypes; getClass() equality does not.',
     ],
@@ -272,12 +272,12 @@ export const ZONE_NOTES: ZoneNote[] = [
       'Generics are compile-time; erasure removes type args at runtime.',
     ],
     inPractice: [
-      'Stack extends Vector historically exposed every List method — clients depend on accidents.',
+      'Stack extends Vector historically exposed every List method, so clients depend on accidents.',
       'Wrap ArrayDeque and expose only push/pop for a clean stack API.',
       'Legacy raw types compile with warnings and hide ClassCastException until runtime.',
     ],
     untouchables: [
-      'Inheritance for reuse of fields is usually the wrong tool — prefer a private field.',
+      'Inheritance for reuse of fields is usually the wrong tool. Prefer a private field instead.',
       'You cannot new T() for a type parameter (erasure).',
       'Casting through raw types can defeat generic safety silently.',
     ],

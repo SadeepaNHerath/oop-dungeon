@@ -16,7 +16,7 @@ export const ENEMIES: EnemyBlueprint[] = [
     id: 'twin-scribe',
     name: 'Twin Scribe',
     title: 'Weaver of this()',
-    taunt: 'One constructor calling another — which ink dries first?',
+    taunt: 'One constructor calling another. Which ink dries first?',
   },
   {
     id: 'dual-hexer',
@@ -34,7 +34,7 @@ export const ENEMIES: EnemyBlueprint[] = [
     id: 'ritualist',
     name: 'Init Ritualist',
     title: 'Fields before flesh',
-    taunt: 'Fields, blocks, constructors — the rite has an order.',
+    taunt: 'Fields, blocks, constructors. The rite has an order.',
   },
   {
     id: 'sentinel',
@@ -64,7 +64,7 @@ export const ENEMIES: EnemyBlueprint[] = [
     id: 'heir-key',
     name: 'Heir of Relics',
     title: 'protected through this',
-    taunt: 'A subclass key opens the field — if the reference is the subclass.',
+    taunt: 'A subclass key opens the field if the reference is the subclass.',
   },
   {
     id: 'stolen-super',
@@ -214,7 +214,7 @@ export const ENEMIES: EnemyBlueprint[] = [
     id: 'first-breath',
     name: 'First Breath',
     title: 'Constructor',
-    taunt: 'I speak when new calls me — before your next line.',
+    taunt: 'I speak when new calls me, before your next line.',
   },
   {
     id: 'private-vault',
